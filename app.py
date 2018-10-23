@@ -1,6 +1,5 @@
 import csv
 from random import shuffle
-from itertools import cycle
 
 
 with open("words.csv", "r", encoding="utf8") as csvfile:
