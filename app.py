@@ -93,6 +93,7 @@ def handle_dialog(request, response, user_storage):
                                   "Неправильных ответов: {}\n".format(user_storage["right_answers"], user_storage["wrong_answers"])
                                   + "До встречи!")
                 response.set_end_session(True)
+                return response, user_storage
 
         user_storage["wrong_answers"] += 1
         response.set_buttons(user_storage["buttons"])
