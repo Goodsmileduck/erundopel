@@ -24,7 +24,7 @@ def handle_dialog(request, response, user_storage):
         # Обрабатываем ответ пользователя.
         if request.command.lower() == "конец игры":
             response.set_text("Спасибо за игру!\n Правильных ответов: {}\n"
-                              "Неправльных ответов: {}\n".format(user_storage["right_answers"], user_storage["wrong_answers"])
+                              "Неправильных ответов: {}\n".format(user_storage["right_answers"], user_storage["wrong_answers"])
                               + "До встречи!")
             response.set_end_session(True)
             user_storage = {}
@@ -66,30 +66,36 @@ def handle_dialog(request, response, user_storage):
 
         elif request.command.lower() == user_storage["answer"]:
             # Пользователь ввел правильный вариант ответа.
-            word = next(user_storage['questions'])
-            answer = words[word][0]
+            try:
+                word = next(user_storage['questions'])
+                answer = words[word][0]
 
-            user_storage["exp_1"] = words[word][1]
-            user_storage["exp_2"] = words[word][2]
-            user_storage["exp_3"] = words[word][3]
+                user_storage["exp_1"] = words[word][1]
+                user_storage["exp_2"] = words[word][2]
+                user_storage["exp_3"] = words[word][3]
 
-            user_storage["word"] = word
-            user_storage["answer"] = answer
-            user_storage["buttons"] = buttons
-            user_storage["right_answers"] += 1
-            response.set_text('Верно!\n'
-                              'Следующее слово.\n'
-                              '{} - это:\n'
-                              '1. {}\n'
-                              '2. {}\n'
-                              '3. {}\n'.format(user_storage["word"],
-                                               user_storage["exp_1"],
-                                               user_storage["exp_2"],
-                                               user_storage["exp_3"]))
-            response.set_buttons(user_storage["buttons"])
+                user_storage["word"] = word
+                user_storage["answer"] = answer
+                user_storage["buttons"] = buttons
+                user_storage["right_answers"] += 1
+                response.set_text('Верно!\n'
+                                  'Следующее слово.\n'
+                                  '{} - это:\n'
+                                  '1. {}\n'
+                                  '2. {}\n'
+                                  '3. {}\n'.format(user_storage["word"],
+                                                   user_storage["exp_1"],
+                                                   user_storage["exp_2"],
+                                                   user_storage["exp_3"]))
+                response.set_buttons(user_storage["buttons"])
 
-            return response, user_storage
-            
+                return response, user_storage
+            except StopIteration:
+                response.set_text("Вы ответили на все вопросы.\n Спасибо за игру!\n Правильных ответов: {}\n"
+                                  "Неправильных ответов: {}\n".format(user_storage["right_answers"], user_storage["wrong_answers"])
+                                  + "До встречи!")
+                response.set_end_session(True)
+
         user_storage["wrong_answers"] += 1
         response.set_buttons(user_storage["buttons"])
         response.set_text("Неверно! Попробуй еще раз.")
