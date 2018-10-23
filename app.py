@@ -89,6 +89,7 @@ def handle_dialog(request, response, user_storage):
 
                 return response, user_storage
             except StopIteration:
+                user_storage["right_answers"] += 1
                 response.set_text("Вы ответили на все вопросы.\n Спасибо за игру!\n Правильных ответов: {}\n"
                                   "Неправильных ответов: {}\n".format(user_storage["right_answers"], user_storage["wrong_answers"])
                                   + "До встречи!")
