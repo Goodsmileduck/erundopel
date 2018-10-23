@@ -33,6 +33,7 @@ def handle_dialog(request, response, user_storage):
             response.set_text("Жаль, возвращайтесь как решить сыграть"
                               "До встречи!")
             response.set_end_session(True)
+            return response, user_storage
         elif request.command.lower() in ['да', 'начнем', 'хочу']:
             _a = list(words.keys())
             shuffle(_a)
