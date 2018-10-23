@@ -69,10 +69,13 @@ def handle_dialog(request, response, user_storage):
             user_storage["buttons"] = buttons
             response.set_text('Верно!\n'
                               'Следующее слово.\n'
-                              '{} - это:\n'.format(user_storage["word"])
-                              '1. {}\n'.format(user_storage["exp_1"])
-                              '2. {}\n'.format(user_storage["exp_2"])
-                              '3. {}\n'.format(user_storage["exp_3"]))
+                              '{} - это:\n'
+                              '1. {}\n'
+                              '2. {}\n'
+                              '3. {}\n'.format(user_storage["word"],
+                                               user_storage["exp_1"],
+                                               user_storage["exp_2"],
+                                               user_storage["exp_3"]))
             response.set_buttons(user_storage["buttons"])
 
             return response, user_storage
