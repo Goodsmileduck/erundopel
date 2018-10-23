@@ -67,6 +67,10 @@ def handle_dialog(request, response, user_storage):
             word = next(user_storage['questions'])
             answer = words[word][0]
 
+            user_storage["exp_1"] = words[word][1]
+            user_storage["exp_2"] = words[word][2]
+            user_storage["exp_3"] = words[word][3]
+
             user_storage["word"] = word
             user_storage["answer"] = answer
             user_storage["buttons"] = buttons
