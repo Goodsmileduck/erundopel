@@ -31,7 +31,7 @@ def handle_dialog(request, response, user_storage):
             return response, user_storage
 
         elif request.command.lower() in ['да', 'начнем', 'хочу']:
-            _a = list(filter(lambda x: request.command.lower() == words[x][1], words.keys()))
+            _a = list(words.keys())
             shuffle(_a)
             inf_list = cycle(_a)
             user_storage['questions'] = inf_list
