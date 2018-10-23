@@ -47,10 +47,14 @@ def handle_dialog(request, response, user_storage):
 
             response.set_text('Я буду говорить слова и варианты объяснения, а ты должен выбрать один из вариантов.\n'
                               'Для завершения игры скажите "конец игры".\n'
-                              '{} - это:\n'.format(user_storage["word"])
-                              '1. {}\n'.format(user_storage["exp_1"])
-                              '2. {}\n'.format(user_storage["exp_2"])
-                              '3. {}\n'.format(user_storage["exp_3"]))
+                              '{} - это:\n'
+                              '1. {}\n'
+                              '2. {}\n'
+                              '3. {}\n'.format(user_storage["word"],
+                                               user_storage["exp_1"],
+                                               user_storage["exp_2"],
+                                               user_storage["exp_3"]))
+
             response.set_buttons(user_storage["buttons"])
 
             return response, user_storage
