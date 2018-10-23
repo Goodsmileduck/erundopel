@@ -74,6 +74,7 @@ def handle_dialog(request, response, user_storage):
             user_storage["word"] = word
             user_storage["answer"] = answer
             user_storage["buttons"] = buttons
+            user_storage["right_answers"] += 1
             response.set_text('Верно!\n'
                               'Следующее слово.\n'
                               '{} - это:\n'
