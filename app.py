@@ -7,7 +7,7 @@ with open("words.csv", "r", encoding="utf8") as csvfile:
     data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
     words = {x["word"]: [x["answer"], x["exp_1"], x['exp_2'], x['exp_3']] for x in data}
 
-nums = ['первый', 'второй', 'третий']
+nums = ['первый', 'второй', 'третий', 'конец игры']
 buttons = [{'title': str(n), 'hide': True} for n in nums]
 
 # Функция для непосредственной обработки диалога.
@@ -23,7 +23,8 @@ def handle_dialog(request, response, user_storage):
     else:
         # Обрабатываем ответ пользователя.
         if request.command.lower() == "конец игры":
-            response.set_text("Спасибо за игру!\n Правильных ответов: {}\n".format(user_storage["right_answers"])
+            response.set_text("Спасибо за игру!\n Правильных ответов: {}\n"
+                              "Неправльных ответов: {}\n".format(user_storage["right_answers"], user_storage["wrong_answers"])
                               + "До встречи!")
             response.set_end_session(True)
             user_storage = {}
@@ -47,6 +48,7 @@ def handle_dialog(request, response, user_storage):
             user_storage["answer"] = answer
             user_storage["buttons"] = buttons
             user_storage["right_answers"] = 0
+            user_storage["wrong_answers"] = 0
 
             response.set_text('Я буду говорить слова и варианты объяснения, а ты должен выбрать один из вариантов.\n'
                               'Для завершения игры скажите "конец игры".\n'
@@ -87,7 +89,9 @@ def handle_dialog(request, response, user_storage):
             response.set_buttons(user_storage["buttons"])
 
             return response, user_storage
-
+            
+        user_storage["wrong_answers"] += 1
+        response.set_buttons(user_storage["buttons"])
         response.set_text("Неверно! Попробуй еще раз.")
 
         return response, user_storage
