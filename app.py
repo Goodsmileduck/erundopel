@@ -33,7 +33,7 @@ def handle_dialog(request, response, user_storage):
         elif request.command.lower() in ['да', 'начнем', 'хочу']:
             _a = list(words.keys())
             shuffle(_a)
-            user_storage['questions'] = _a
+            user_storage['questions'] = iter(_a)
 
             word = next(user_storage['questions'])
             answer = words[word][0]
