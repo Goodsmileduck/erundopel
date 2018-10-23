@@ -6,12 +6,13 @@ with open("words.csv", "r", encoding="utf8") as csvfile:
     data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
     words = {x["word"]: [x["answer"], x["exp_1"], x['exp_2'], x['exp_3']] for x in data}
 
+variants = ['первый', 'второй', 'третий', 'один', 'два', 'три']
 nums = ['первый', 'второй', 'третий', 'конец игры']
 buttons = [{'title': str(n), 'hide': True} for n in nums]
 
 # Функция для непосредственной обработки диалога.
 def handle_dialog(request, response, user_storage):
-    if request.is_new_session:
+    if request.is_new_session or request.command.lower() == 'начать игру':
         user_storage = {}
         response.set_text('Привет! Ерундопель - это игра где нужно угадать правильное определение для слова. Хочешь попробовать?')
         response.set_buttons([{'title': 'Да', 'hide': True},
@@ -52,7 +53,7 @@ def handle_dialog(request, response, user_storage):
             user_storage["right_answers"] = 0
             user_storage["wrong_answers"] = 0
 
-            response.set_text('Я буду говорить слова и варианты объяснения, а ты должен выбрать один из вариантов.\n'
+            response.set_text('Я буду говорить слова и определения, а ты должен выбрать один из вариантов.\n'
                               'Для завершения игры скажите "конец игры".\n'
                               '{} - это:\n'
                               '1. {}\n'
@@ -66,7 +67,7 @@ def handle_dialog(request, response, user_storage):
 
             return response, user_storage
 
-        elif request.command.lower() == user_storage["answer"]:
+        elif request.command.lower() in variants and request.command.lower() == user_storage["answer"]:
             # Пользователь ввел правильный вариант ответа.
             try:
                 word = next(user_storage['questions'])
@@ -99,9 +100,12 @@ def handle_dialog(request, response, user_storage):
                                   + "До встречи!")
                 response.set_end_session(True)
                 return response, user_storage
+        elif request.command.lower() in variants and request.command.lower() != user_storage["answer"]:
+            user_storage["wrong_answers"] += 1
+            response.set_buttons(user_storage["buttons"])
+            response.set_text("Неверно! Попробуй еще раз.")
+            return response, user_storage
 
-        user_storage["wrong_answers"] += 1
-        response.set_buttons(user_storage["buttons"])
-        response.set_text("Неверно! Попробуй еще раз.")
+        response.set_text("Я не понимаю, твой запрос. Попробуй начать игру.")
 
         return response, user_storage
