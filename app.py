@@ -30,7 +30,7 @@ def handle_dialog(request, response, user_storage):
 
             return response, user_storage
         elif request.command.lower() in ['нет']:
-            response.set_text("Жаль, возвращайтесь как решить сыграть"
+            response.set_text("Жаль, возвращайтесь как решить сыграть.\n"
                               "До встречи!")
             response.set_end_session(True)
             return response, user_storage
