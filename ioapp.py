@@ -12,10 +12,10 @@ WEBHOOK_URL_PATH = '/'  # webhook endpoint
 
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 5000
-
+LOG_LEVEL = logging.DEBUG
 
 logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
-                    level=logging.DEBUG)
+                    level=LOG_LEVEL)
 
 # Создаем экземпляр диспетчера и подключаем хранилище в памяти
 dp = Dispatcher(storage=MemoryStorage())
@@ -32,6 +32,14 @@ variants = [1, 2, 3]
 nums = ['первый', 'второй', 'третий', 'конец игры']
 buttons = [{'title': str(n), 'hide': True} for n in nums]
 
+if LOG_LEVEL == logging.DEBUG:
+    @dp.request_handler()
+    async def take_all_requests(alice_request):
+        # Логгируем запрос. Можно записывать в БД и тд
+        logging.debug('New request! %r', alice_request)
+        # Поднимаем исключение, по которому обработка перейдёт
+        # к следующему хэндлеру, у которого подойдут фильтры
+        raise SkipHandler
 
 # Новая сессия. Приветствуем пользователя
 @dp.request_handler(func=lambda areq: areq.session.new)
@@ -76,6 +84,12 @@ async def handle_user_agrees(alice_request):
     return alice_request.response(
         'Я буду говорить слова и определения, а вы должны выбрать один из вариантов.\n'
         'Для завершения игры скажите "конец игры".\n'
+        '{} - это:\n'
+        '1. {}\n'
+        '2. {}\n'
+        '3. {}\n'.format(word, exp_1, exp_2, exp_3),
+        tts='Я буду говорить слова и определения, а вы должны выбрать один из вариантов.\n'
+        'Для завершения игр+ы скажите - "конец игр+ы".\n'
         '{} - это:\n'
         '1. {}\n'
         '2. {}\n'
