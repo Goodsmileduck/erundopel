@@ -136,7 +136,7 @@ async def handle_user_answer(alice_request):
                 '1. {}\n'
                 '2. {}\n'
                 '3. {}\n'.format(word, exp_1, exp_2, exp_3),
-                buttons=suggests)
+                buttons=choose_buttons)
         except StopIteration:
             right = data.get('right_answers')
             wrong = data.get('wrong_answers')
