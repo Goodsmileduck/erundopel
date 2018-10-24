@@ -97,7 +97,7 @@ async def handle_user_agrees(alice_request):
 @dp.request_handler(commands=['привет', 'как дела'])
 async def handle_user_cancel(alice_request):
     return alice_request.response(
-        "Так то мы здесь поиграть собрались, а ну-ка давай начем игру?"
+        "Так то мы здесь поиграть собрались, а ну-ка давай начем игру?",
         buttons=start_buttons)
 
 
