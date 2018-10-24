@@ -86,6 +86,7 @@ async def handle_user_agrees(alice_request):
 # Заканчиваем игру по команде
 @dp.request_handler(commands=['конец игры'])
 async def handle_user_cancel(alice_request):
+    user_id = alice_request.session.user_id
     data = await dp.storage.get_data(user_id)
     right = data.get('right_answers')
     wrong = data.get('wrong_answers')
@@ -98,6 +99,7 @@ async def handle_user_cancel(alice_request):
 
 @dp.request_handler(commands=['1', '2', '3'])
 async def handle_user_answer(alice_request):
+    user_id = alice_request.session.user_id
     data = await dp.storage.get_data(user_id)
     get_answer = data.get('answer')
     suggests = ["Первый", "Второй", "Третий"]
