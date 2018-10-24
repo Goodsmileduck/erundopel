@@ -104,7 +104,7 @@ async def handle_user_cancel(alice_request):
     return alice_request.response(
         "Спасибо за игру!\n Правильных ответов: {}\n"
         "Неправильных ответов: {}\n"
-        "До встречи!".format(right_answers, wrong_answers),
+        "До встречи!".format(right, wrong),
         end_session=True)
 
 
