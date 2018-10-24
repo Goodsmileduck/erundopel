@@ -5,7 +5,7 @@ from random import shuffle
 
 from aiohttp import web
 from aioalice import Dispatcher, get_new_configured_app, types
-from aioalice.dispatcher import MemoryStorage
+from aioalice.dispatcher import MemoryStorage, SkipHandler
 from aioalice.utils.helper import Helper, HelperMode, Item
 
 WEBHOOK_URL_PATH = '/'  # webhook endpoint
