@@ -117,7 +117,6 @@ async def handle_user_answer(alice_request):
     all_answers = [["первый", "один", "1"],
                    ["второй", "два", "2"],
                    ["третий", "три", "3"]]
-    logging.debug('NLU: %r', alice_request.request.nlu.entities[0].value)
     answer_list = all_answers[get_answer]
     if alice_request.request.command in answer_list:
         try:
