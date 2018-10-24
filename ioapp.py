@@ -15,7 +15,7 @@ WEBAPP_PORT = 5000
 
 
 logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
-                    level=logging.INFO)
+                    level=logging.DEBUG)
 
 # Создаем экземпляр диспетчера и подключаем хранилище в памяти
 dp = Dispatcher(storage=MemoryStorage())
