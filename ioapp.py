@@ -36,16 +36,9 @@ buttons = [{'title': str(n), 'hide': True} for n in nums]
 # Новая сессия. Приветствуем пользователя
 @dp.request_handler(func=lambda areq: areq.session.new)
 async def handle_new_session(alice_request):
-    user_id = alice_request.session.user_id
-    await dp.storage.update_data(
-        user_id, suggests=[
-            "Давай",
-            "Не хочу",
-        ]
-    )
+    suggests=["Давай","Не хочу"]
     logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
 
-    suggests = await get_suggests(user_id)
     return alice_request.response(
         "Привет! Ерундопель - это игра где нужно угадать правильное определение для слова. Хочешь попробовать?",
         tts="Привет! Ерундопель - это игра где нужно угадать правильное определение для сл+ова. Хочешь попробовать?",
