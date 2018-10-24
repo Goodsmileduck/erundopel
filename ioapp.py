@@ -59,7 +59,7 @@ async def handle_user_stop(alice_request):
 
 
 #Начинаем игру
-@dp.request_handler(commands=['давай', 'начать игру', 'да'])
+@dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу'])
 async def handle_user_agrees(alice_request):
     user_id = alice_request.session.user_id
     words_list = list(words.keys())
