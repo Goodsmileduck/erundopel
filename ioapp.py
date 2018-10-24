@@ -138,7 +138,6 @@ async def handle_user_answer(alice_request):
 # Все остальные запросы попадают сюда
 @dp.request_handler()
 async def handle_all_other_requests(alice_request):
-    suggests = await get_suggests(alice_request.session.user_id)
     return alice_request.response(
         "Я не понимаю, твой запрос. Попробуй снова."
     )
