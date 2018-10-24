@@ -115,7 +115,7 @@ async def handle_user_cancel(alice_request):
 async def handle_user_answer(alice_request):
     user_id = alice_request.session.user_id
     data = await dp.storage.get_data(user_id)
-    words_iter = data.get('words_iter')
+    words_iter = data.get('words')
     get_answer = data.get('answer')
     suggests = ["Первый", "Второй", "Третий"]
     logging.debug('NLU: %r', alice_request.request.nlu.entities[0].value)
