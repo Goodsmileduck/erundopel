@@ -27,7 +27,7 @@ with open("words.csv", "r", encoding="utf8") as csvfile:
     data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
     words = {x["word"]: [x["answer"], x["exp_1"], x['exp_2'], x['exp_3']] for x in data}
 
-
+start_buttons = ["Давай","Не хочу"]
 choose_buttons = ['первый', 'второй', 'третий', 'конец игры']
 
 if LOG_LEVEL == logging.DEBUG:
@@ -43,13 +43,12 @@ if LOG_LEVEL == logging.DEBUG:
 @dp.request_handler(func=lambda areq: areq.session.new)
 async def handle_new_session(alice_request):
     user_id = alice_request.session.user_id
-    suggests=["Давай","Не хочу"]
     logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
 
     return alice_request.response(
         "Привет! Ерундопель - это игра где нужно угадать правильное определение для слова. Хочешь попробовать?",
         tts="Привет! Ерундопель - это игра где нужно угадать правильное определение для сл+ова. Хочешь попробовать?",
-        buttons=suggests)
+        buttons=start_buttons)
 
 # Не хочешь, не надо. Закрыть сессию
 @dp.request_handler(commands=['нет', 'не хочу'])
@@ -79,19 +78,27 @@ async def handle_user_agrees(alice_request):
     await dp.storage.update_data(user_id, wrong_answers=0)
 
     return alice_request.response(
-        'Я буду говорить слова и определения, а вы должны выбрать один из вариантов.\n'
+        'Я буду говорить слова и определения, а вы должны выбрать один из вариантов и назвать его номер.\n'
         'Для завершения игры скажите "конец игры".\n'
         '{} - это:\n'
         '1. {}\n'
         '2. {}\n'
         '3. {}\n'.format(word, exp_1, exp_2, exp_3),
-        tts='Я буду говорить слова и определения, а вы должны выбрать один из вариантов.\n'
+        tts='Я буду говорить слова и определения, а вы должны выбрать один из вариантов и назвать его номер.\n'
         'Для завершения игр+ы скажите - "конец игр+ы".\n'
         '{} - это:\n'
         '1. {}\n'
         '2. {}\n'
         '3. {}\n'.format(word, exp_1, exp_2, exp_3),
         buttons=choose_buttons)
+
+
+# Немного вариативности
+@dp.request_handler(commands=['привет', 'как дела'])
+async def handle_user_cancel(alice_request):
+    return alice_request.response(
+        "Так то мы здесь поиграть собрались, а ну-ка давай начем игру?"
+        buttons=start_buttons)
 
 
 # Заканчиваем игру по команде
@@ -108,15 +115,15 @@ async def handle_user_cancel(alice_request):
         end_session=True)
 
 
-@dp.request_handler(commands=["первый", "один", "1", "второй", "два", "2", "третий", "три", "3"])
+@dp.request_handler(commands=["первый", "первый вариант", "один", "1", "второй", "второй вариант", "два", "2", "третий", "третий вариант", "три", "3"])
 async def handle_user_answer(alice_request):
     user_id = alice_request.session.user_id
     data = await dp.storage.get_data(user_id)
     words_iter = data.get('words')
     get_answer = int(data.get('answer')) - 1
-    all_answers = [["первый", "один", "1"],
-                   ["второй", "два", "2"],
-                   ["третий", "три", "3"]]
+    all_answers = [["первый", "первый вариант", "один", "1"],
+                   ["второй", "второй вариант", "два", "2"],
+                   ["третий", "третий вариант", "три", "3"]]
     answer_list = all_answers[get_answer]
     if alice_request.request.command in answer_list:
         try:
