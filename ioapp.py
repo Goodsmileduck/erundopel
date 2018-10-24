@@ -108,7 +108,7 @@ async def handle_user_cancel(alice_request):
         end_session=True)
 
 
-@dp.request_handler(commands=['1', '2', '3'])
+@dp.request_handler(commands=["первый", "один", "1", "второй", "два", "2", "третий", "три", "3"])
 async def handle_user_answer(alice_request):
     user_id = alice_request.session.user_id
     data = await dp.storage.get_data(user_id)
@@ -119,7 +119,7 @@ async def handle_user_answer(alice_request):
                    ["третий", "три", "3"]]
     logging.debug('NLU: %r', alice_request.request.nlu.entities[0].value)
     answer_list = all_answers[get_answer]
-    if alice_request.request.nlu.entities[0].value in answer_list:
+    if alice_request.request.command in answer_list:
         try:
             word = next(words_iter)
 
