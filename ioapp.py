@@ -128,7 +128,8 @@ async def handle_user_answer(alice_request):
             exp_3 = words[word][3]
 
             await dp.storage.update_data(user_id, answer=words[word][0])
-            await dp.storage.update_data(user_id, right_answers+= 1)
+            right_answers = int(data.get('right_answers'))
+            await dp.storage.update_data(user_id, right_answers=right_answers + 1)
             return alice_request.response(
                 'Верно!\n'
                 'Следующее слово.\n'
@@ -147,7 +148,8 @@ async def handle_user_answer(alice_request):
                 "Неправильных ответов: {}\n".format(right, wrong),
                 end_session=True)
     else:
-        await dp.storage.update_data(user_id, wrong_answers+= 1)
+        wrong_answers = int(data.get('wrong_answers'))
+        await dp.storage.update_data(user_id, wrong_answers=wrong_answers + 1)
         return alice_request.response("Неверно! Попробуй еще раз.",
                                       buttons=choose_buttons)
 
