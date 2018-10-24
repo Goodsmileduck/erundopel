@@ -1,9 +1,13 @@
 FROM python:3.6.5
 
-WORKDIR /app
-COPY . /app
+ENV DIR /app
+
+WORKDIR ${DIR}
+COPY requirements.txt ${DIR}/requirements.txt
+RUN pip install -r ${DIR}/requirements.txt
 
 EXPOSE 5000
 
-RUN pip install -r requirements.txt
-CMD FLASK_APP=alice_app.py flask run --host="::"
+
+COPY . /app
+CMD ["python", "ioapp.py"]

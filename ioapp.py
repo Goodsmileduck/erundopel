@@ -1,0 +1,155 @@
+
+import logging
+import csv
+from random import shuffle
+
+from aiohttp import web
+from aioalice import Dispatcher, get_new_configured_app, types
+from aioalice.dispatcher import MemoryStorage
+from aioalice.utils.helper import Helper, HelperMode, Item
+
+WEBHOOK_URL_PATH = '/'  # webhook endpoint
+
+WEBAPP_HOST = '0.0.0.0'
+WEBAPP_PORT = 5000
+
+
+logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
+                    level=logging.INFO)
+
+# Создаем экземпляр диспетчера и подключаем хранилище в памяти
+dp = Dispatcher(storage=MemoryStorage())
+
+
+CANCEL_TEXTS = ['отмени', 'прекрати', 'выйти', 'выход']
+GAMES_LIST = ['Угадай число', 'Наперстки']
+
+with open("words.csv", "r", encoding="utf8") as csvfile:
+    data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
+    words = {x["word"]: [x["answer"], x["exp_1"], x['exp_2'], x['exp_3']] for x in data}
+
+variants = [1, 2, 3]
+nums = ['первый', 'второй', 'третий', 'конец игры']
+buttons = [{'title': str(n), 'hide': True} for n in nums]
+
+
+# Новая сессия. Приветствуем пользователя
+@dp.request_handler(func=lambda areq: areq.session.new)
+async def handle_new_session(alice_request):
+    user_id = alice_request.session.user_id
+    await dp.storage.update_data(
+        user_id, suggests=[
+            "Давай",
+            "Не хочу",
+        ]
+    )
+    logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
+
+    suggests = await get_suggests(user_id)
+    return alice_request.response(
+        "Привет! Ерундопель - это игра где нужно угадать правильное определение для слова. Хочешь попробовать?",
+        tts="Привет! Ерундопель - это игра где нужно угадать правильное определение для сл+ова. Хочешь попробовать?",
+        buttons=suggests)
+
+# Не хочешь, не надо. Закрыть сессию
+@dp.request_handler(commands=['нет', 'не хочу'])
+async def handle_user_stop(alice_request):
+    return alice_request.response("Жаль, возвращайтесь как решите сыграть.\n"
+                                  "До встречи!",
+                                  end_session=True)
+
+
+#Начинаем игру
+@dp.request_handler(commands=['давай', 'начать игру', 'да'])
+async def handle_user_agrees(alice_request):
+    suggests = ["Первый", "Второй", "Третий"]
+    user_id = alice_request.session.user_id
+    words_list = list(words.keys())
+    shuffle(words_list)
+    await dp.storage.update_data(user_id, words=words_list)
+
+    words_iter = iter(words_list)
+    word = next(words_iter)
+
+    exp_1 = words[word][1]
+    exp_2 = words[word][2]
+    exp_3 = words[word][3]
+
+    await dp.storage.update_data(user_id, answer=words[word][0])
+    await dp.storage.update_data(user_id, right_answers=0)
+    await dp.storage.update_data(user_id, wrong_answers=0)
+
+    return alice_request.response(
+        'Я буду говорить слова и определения, а вы должны выбрать один из вариантов.\n'
+        'Для завершения игры скажите "конец игры".\n'
+        '{} - это:\n'
+        '1. {}\n'
+        '2. {}\n'
+        '3. {}\n'.format(word, exp_1, exp_2, exp_3),
+        buttons=suggests)
+
+
+# Заканчиваем игру по команде
+@dp.request_handler(commands=['конец игры'])
+async def handle_user_cancel(alice_request):
+    data = await dp.storage.get_data(user_id)
+    right = data.get('right_answers')
+    wrong = data.get('wrong_answers')
+    return alice_request.response(
+        "Спасибо за игру!\n Правильных ответов: {}\n"
+        "Неправильных ответов: {}\n"
+        "До встречи!".format(right_answers, wrong_answers),
+        end_session=True)
+
+
+@dp.request_handler(commands=['1', '2', '3'])
+async def handle_user_answer(alice_request):
+    data = await dp.storage.get_data(user_id)
+    get_answer = data.get('answer')
+    suggests = ["Первый", "Второй", "Третий"]
+
+    if alice_request.nlu.entities[0] == get_answer:
+        try:
+            word = next(words_iter)
+
+            exp_1 = words[word][1]
+            exp_2 = words[word][2]
+            exp_3 = words[word][3]
+
+            await dp.storage.update_data(user_id, answer=words[word][0])
+            await dp.storage.update_data(user_id, right_answers=+1)
+            return alice_request.response(
+                'Верно!\n'
+                'Следующее слово.\n'
+                '{} - это:\n'
+                '1. {}\n'
+                '2. {}\n'
+                '3. {}\n'.format(word, exp_1, exp_2, exp_3),
+                buttons=suggests)
+        except StopIteration:
+            right = data.get('right_answers')
+            wrong = data.get('wrong_answers')
+            return alice_request.response(
+                "Вы ответили на все вопросы.\n"
+                "Спасибо за игру!\n"
+                "Правильных ответов: {}\n"
+                "Неправильных ответов: {}\n".format(right, wrong),
+                end_session=True)
+    else:
+        await dp.storage.update_data(user_id, wrong_answers=+1)
+        return alice_request.response("Неверно! Попробуй еще раз.",
+                                      buttons=suggests)
+
+
+# Все остальные запросы попадают сюда
+@dp.request_handler()
+async def handle_all_other_requests(alice_request):
+    suggests = await get_suggests(alice_request.session.user_id)
+    return alice_request.response(
+        "Я не понимаю, твой запрос. Попробуй снова."
+    )
+
+
+if __name__ == '__main__':
+    app = get_new_configured_app(dispatcher=dp, path=WEBHOOK_URL_PATH)
+    web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
