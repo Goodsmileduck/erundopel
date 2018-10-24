@@ -36,6 +36,7 @@ buttons = [{'title': str(n), 'hide': True} for n in nums]
 # Новая сессия. Приветствуем пользователя
 @dp.request_handler(func=lambda areq: areq.session.new)
 async def handle_new_session(alice_request):
+    user_id = alice_request.session.user_id
     suggests=["Давай","Не хочу"]
     logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
 
