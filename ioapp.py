@@ -104,7 +104,7 @@ async def handle_user_answer(alice_request):
     get_answer = data.get('answer')
     suggests = ["Первый", "Второй", "Третий"]
 
-    if alice_request.nlu.entities[0] == get_answer:
+    if alice_request.request.nlu.entities[0] == get_answer:
         try:
             word = next(words_iter)
 
