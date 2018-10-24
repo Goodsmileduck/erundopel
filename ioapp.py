@@ -9,7 +9,6 @@ from aioalice.dispatcher import MemoryStorage, SkipHandler
 from aioalice.utils.helper import Helper, HelperMode, Item
 
 WEBHOOK_URL_PATH = '/'  # webhook endpoint
-
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 5000
 LOG_LEVEL = logging.DEBUG
@@ -28,9 +27,8 @@ with open("words.csv", "r", encoding="utf8") as csvfile:
     data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
     words = {x["word"]: [x["answer"], x["exp_1"], x['exp_2'], x['exp_3']] for x in data}
 
-variants = [1, 2, 3]
-nums = ['первый', 'второй', 'третий', 'конец игры']
-buttons = [{'title': str(n), 'hide': True} for n in nums]
+
+choose_buttons = ['первый', 'второй', 'третий', 'конец игры']
 
 if LOG_LEVEL == logging.DEBUG:
     @dp.request_handler()
@@ -64,7 +62,6 @@ async def handle_user_stop(alice_request):
 #Начинаем игру
 @dp.request_handler(commands=['давай', 'начать игру', 'да'])
 async def handle_user_agrees(alice_request):
-    suggests = ["Первый", "Второй", "Третий"]
     user_id = alice_request.session.user_id
     words_list = list(words.keys())
     shuffle(words_list)
@@ -94,7 +91,7 @@ async def handle_user_agrees(alice_request):
         '1. {}\n'
         '2. {}\n'
         '3. {}\n'.format(word, exp_1, exp_2, exp_3),
-        buttons=suggests)
+        buttons=choose_buttons)
 
 
 # Заканчиваем игру по команде
@@ -116,10 +113,13 @@ async def handle_user_answer(alice_request):
     user_id = alice_request.session.user_id
     data = await dp.storage.get_data(user_id)
     words_iter = data.get('words')
-    get_answer = data.get('answer')
-    suggests = ["Первый", "Второй", "Третий"]
+    get_answer = int(data.get('answer')) - 1
+    all_answers = [["первый", "один", "1"],
+                   ["второй", "два", "2"],
+                   ["третий", "три", "3"]]
     logging.debug('NLU: %r', alice_request.request.nlu.entities[0].value)
-    if alice_request.request.nlu.entities[0].value == int(get_answer):
+    answer_list = all_answers[get_answer]
+    if alice_request.request.nlu.entities[0].value in answer_list:
         try:
             word = next(words_iter)
 
@@ -149,7 +149,7 @@ async def handle_user_answer(alice_request):
     else:
         await dp.storage.update_data(user_id, wrong_answers=+1)
         return alice_request.response("Неверно! Попробуй еще раз.",
-                                      buttons=suggests)
+                                      buttons=choose_buttons)
 
 
 # Все остальные запросы попадают сюда
