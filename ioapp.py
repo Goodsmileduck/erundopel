@@ -117,7 +117,7 @@ async def handle_user_answer(alice_request):
     data = await dp.storage.get_data(user_id)
     get_answer = data.get('answer')
     suggests = ["Первый", "Второй", "Третий"]
-    logging.debug('NLU: {}', alice_request.request.nlu.entities[0].value)
+    logging.debug('NLU: %r', alice_request.request.nlu.entities[0].value)
     if alice_request.request.nlu.entities[0].value == get_answer:
         try:
             word = next(words_iter)
