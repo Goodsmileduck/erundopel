@@ -150,7 +150,7 @@ async def handle_user_answer(alice_request):
     else:
         wrong_answers = int(data.get('wrong_answers'))
         await dp.storage.update_data(user_id, wrong_answers=wrong_answers + 1)
-        return alice_request.response("Неверно! Попробуй еще раз.",
+        return alice_request.response('Неверно! Попробуйте еще раз. ',
                                       buttons=choose_buttons)
 
 
@@ -158,7 +158,7 @@ async def handle_user_answer(alice_request):
 @dp.request_handler()
 async def handle_all_other_requests(alice_request):
     return alice_request.response(
-        "Я не понимаю, твой запрос. Попробуй снова."
+        'Я не понимаю, твой запрос. Попробуй снова. Если хотите начать игру заново, скажите "начать игру"'
     )
 
 
