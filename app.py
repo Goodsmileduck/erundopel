@@ -14,9 +14,9 @@ WEBAPP_PORT = 5000
 
 LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
 
-LOG_LEVEL_DICT = ["DEBUG": logging.DEBUG,
+LOG_LEVEL_DICT = {"DEBUG": logging.DEBUG,
                   "INFO": logging.INFO,
-                  "WARNING": logging.WARNING]
+                  "WARNING": logging.WARNING}
 
 logging.basicConfig(
     format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
