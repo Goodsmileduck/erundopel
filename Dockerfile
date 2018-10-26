@@ -10,4 +10,4 @@ EXPOSE 5000
 
 
 COPY . /app
-CMD ["python", "ioapp.py"]
+CMD ["python", "app.py"]

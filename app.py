@@ -1,5 +1,5 @@
 
-import logging
+import os, logging
 import csv
 from random import shuffle
 
@@ -11,24 +11,33 @@ from aioalice.utils.helper import Helper, HelperMode, Item
 WEBHOOK_URL_PATH = '/'  # webhook endpoint
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 5000
-LOG_LEVEL = logging.DEBUG
 
-logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
-                    level=LOG_LEVEL)
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+
+LOG_LEVEL_DICT = ["DEBUG": logging.DEBUG,
+                  "INFO": logging.INFO,
+                  "WARNING": logging.WARNING]
+
+logging.basicConfig(
+    format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
+    level=LOG_LEVEL_DICT[LOG_LEVEL])
 
 # Создаем экземпляр диспетчера и подключаем хранилище в памяти
 dp = Dispatcher(storage=MemoryStorage())
 
+start_buttons = ["Давай","Не хочу"]
+choose_buttons = ['первый', 'второй', 'третий', 'конец игры']
 
-CANCEL_TEXTS = ['отмени', 'прекрати', 'выйти', 'выход']
-GAMES_LIST = ['Угадай число', 'Наперстки']
+ALL_ANSWERS = [["первый", "первый вариант", "один", "1"],
+               ["второй", "второй вариант", "два", "2"],
+               ["третий", "третий вариант", "три", "3"]]
 
 with open("words.csv", "r", encoding="utf8") as csvfile:
     data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
-    words = {x["word"]: [x["answer"], x["exp_1"], x['exp_2'], x['exp_3']] for x in data}
+    words = {x["word"]: [x["answer"],
+             x["exp_1"], x['exp_2'],
+             x['exp_3']] for x in data}
 
-start_buttons = ["Давай","Не хочу"]
-choose_buttons = ['первый', 'второй', 'третий', 'конец игры']
 
 if LOG_LEVEL == logging.DEBUG:
     @dp.request_handler()
@@ -46,8 +55,10 @@ async def handle_new_session(alice_request):
     logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
 
     return alice_request.response(
-        "Привет! Ерундопель - это игра где нужно угадать правильное определение для слова. Хочешь попробовать?",
-        tts="Привет! Ерундопель - это игра где нужно угадать правильное определение для сл+ова. Хочешь попробовать?",
+        "Привет! Ерундопель - это игра где нужно угадать "
+        "правильное определение для слова. Хочешь попробовать?",
+        tts="Привет! Ерундопель - это игра где нужно угадать "
+        "правильное определение для сл+ова. Хочешь попробовать?",
         buttons=start_buttons)
 
 # Не хочешь, не надо. Закрыть сессию
@@ -78,18 +89,20 @@ async def handle_user_agrees(alice_request):
     await dp.storage.update_data(user_id, wrong_answers=0)
 
     return alice_request.response(
-        'Я буду говорить слова и определения, а вы должны выбрать один из вариантов и назвать его номер.\n'
-        'Для завершения игры скажите "конец игры".\n'
-        '{} - это:\n'
-        '1. {}\n'
-        '2. {}\n'
-        '3. {}\n'.format(word, exp_1, exp_2, exp_3),
-        tts='Я буду говорить слова и определения, а вы должны выбрать один из вариантов и назвать его номер.\n'
-        'Для завершения игр+ы скажите - "конец игр+ы".\n'
-        '{} - это:\n'
-        '1. {}\n'
-        '2. {}\n'
-        '3. {}\n'.format(word, exp_1, exp_2, exp_3),
+        'Я буду говорить слова и определения,'
+        ' а вы должны выбрать один из вариантов и назвать его номер.\n'
+        'Для завершения игры скажите "конец игры".\n\n'
+        '{word} - это:\n\n'
+        '1. {exp_1}\n'
+        '2. {exp_2}\n'
+        '3. {exp_3}\n',
+        tts='Я буду говорить слова и определения,'
+        ' а вы должны выбрать один из вариантов и назвать его номер - .\n'
+        'Для завершения игр+ы скажите - "конец игр+ы" -.\n\n'
+        '{word} - это:\n\n'
+        '1. {exp_1}\n'
+        '2. {exp_2}\n'
+        '3. {exp_3}\n',
         buttons=choose_buttons)
 
 
@@ -109,22 +122,23 @@ async def handle_user_cancel(alice_request):
     right = data.get('right_answers')
     wrong = data.get('wrong_answers')
     return alice_request.response(
-        "Спасибо за игру!\n Правильных ответов: {}\n"
-        "Неправильных ответов: {}\n"
-        "До встречи!".format(right, wrong),
+        f"Спасибо за игру!\n Правильных ответов: {right}\n"
+        f"Неправильных ответов: {wrong}\n"
+        f"До встречи!",
         end_session=True)
 
 
-@dp.request_handler(commands=["первый", "первый вариант", "один", "1", "второй", "второй вариант", "два", "2", "третий", "третий вариант", "три", "3"])
+@dp.request_handler(commands=[
+    "первый", "первый вариант", "один", "1",
+    "второй", "второй вариант", "два", "2",
+    "третий", "третий вариант", "три", "3"])
 async def handle_user_answer(alice_request):
     user_id = alice_request.session.user_id
     data = await dp.storage.get_data(user_id)
     words_iter = data.get('words')
     get_answer = int(data.get('answer')) - 1
-    all_answers = [["первый", "первый вариант", "один", "1"],
-                   ["второй", "второй вариант", "два", "2"],
-                   ["третий", "третий вариант", "три", "3"]]
-    answer_list = all_answers[get_answer]
+
+    answer_list = ALL_ANSWERS[get_answer]
     if alice_request.request.command in answer_list:
         try:
             word = next(words_iter)
@@ -135,23 +149,24 @@ async def handle_user_answer(alice_request):
 
             await dp.storage.update_data(user_id, answer=words[word][0])
             right_answers = int(data.get('right_answers'))
-            await dp.storage.update_data(user_id, right_answers=right_answers + 1)
+            await dp.storage.update_data(user_id,
+                                         right_answers=right_answers + 1)
             return alice_request.response(
-                'Верно!\n'
-                'Следующее слово.\n'
-                '{} - это:\n'
-                '1. {}\n'
-                '2. {}\n'
-                '3. {}\n'.format(word, exp_1, exp_2, exp_3),
+                f'Верно!\n\n'
+                f'Следующее слово.\n'
+                f'{word} - это:\n\n'
+                f'1. {exp_1}\n'
+                f'2. {exp_2}\n'
+                f'3. {exp_3}\n',
                 buttons=choose_buttons)
         except StopIteration:
             right = data.get('right_answers')
             wrong = data.get('wrong_answers')
             return alice_request.response(
-                "Вы ответили на все вопросы.\n"
-                "Спасибо за игру!\n"
-                "Правильных ответов: {}\n"
-                "Неправильных ответов: {}\n".format(right, wrong),
+                f"Вы ответили на все вопросы.\n"
+                f"Спасибо за игру!\n"
+                f"Правильных ответов: {right}\n"
+                f"Неправильных ответов: {wrong}\n",
                 end_session=True)
     else:
         wrong_answers = int(data.get('wrong_answers'))
@@ -164,7 +179,8 @@ async def handle_user_answer(alice_request):
 @dp.request_handler()
 async def handle_all_other_requests(alice_request):
     return alice_request.response(
-        'Я не понимаю, твой запрос. Попробуй снова. Если хотите начать игру заново, скажите "начать игру"'
+        'Я не понимаю, твой запрос. Попробуй снова.'
+        'Если хотите начать игру заново, скажите "начать игру"'
     )
 
 
