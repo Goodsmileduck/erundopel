@@ -1,8 +1,10 @@
 version: '2'
 services:
   alisa:
-    container_name: alisa
+    container_name: erundopel
     build: .
-    image: alisa:latest
+    image: erundopel:latest
+    environment:
+      - LOG_LEVEL=DEBUG
     ports:
       - 5000:5000
