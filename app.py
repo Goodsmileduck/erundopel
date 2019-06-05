@@ -54,9 +54,9 @@ async def handle_new_session(alice_request):
     logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
 
     return alice_request.response(
-        "Привет! Абсупдопель - это игра где нужно угадать "
+        "Привет! Абсурдопель - это игра где нужно угадать "
         "правильное определение для слова. Хочешь попробовать?",
-        tts="Привет! Абсупдопель - это игра где нужно угадать "
+        tts="Привет! Абсурдопель - это игра где нужно угадать "
         "правильное определение для сл+ова. Хочешь попробовать?",
         buttons=start_buttons)
 
@@ -167,6 +167,11 @@ async def handle_user_answer(alice_request):
             right = data.get('right_answers')
             wrong = data.get('wrong_answers')
             return alice_request.response(
+                f"Вы ответили на все вопросы.\n"
+                f"Спасибо за игру!\n"
+                f"Правильных ответов: {right}\n"
+                f"Неправильных ответов: {wrong}\n",
+                tts='<speaker audio="alice-sounds-game-win-1.opus">'
                 f"Вы ответили на все вопросы.\n"
                 f"Спасибо за игру!\n"
                 f"Правильных ответов: {right}\n"
