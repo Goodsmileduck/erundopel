@@ -5,13 +5,25 @@ metadata:
   name: {{ template "fullname" . }}
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+{{- if .Values.ingress.annotations }}
+  annotations:
+{{ toYaml .Values.ingress.annotations | indent 4 }}
+{{- end }}
 spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.domain }}
+    secretName: {{ template "fullname" . }}-net-tls
   rules:
-  - host: {{ .Release.Name }}.{{ .Values.basedomain }}
+  - host: {{ .Values.ingress.domain }}
     http:
       paths:
       - path: /
         backend:
+          {{- if .Values.service.name }}
+          serviceName: {{ .Values.service.name }}
+          {{- else }}
           serviceName: {{ template "fullname" . }}
+          {{- end }}
           servicePort: {{ .Values.service.externalPort }}
 {{- end -}}

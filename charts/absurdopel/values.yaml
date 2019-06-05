@@ -29,7 +29,14 @@ resources:
     cpu: 100m
     memory: 128Mi
 ingress:
-  enabled: false
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-staging"
+    certmanager.k8s.io/acme-challenge-type: http01
+  domain: absurdopel.jx.kubeapp.ru
 probePath: /
 livenessProbe:
   initialDelaySeconds: 60
