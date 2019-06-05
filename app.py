@@ -112,6 +112,11 @@ async def handle_user_cancel(alice_request):
         "Так то мы здесь поиграть собрались, а ну-ка давай начем игру?",
         buttons=start_buttons)
 
+@dp.request_handler(commands=['помощь', 'что ты умеешь', 'что ты умеешь?'])
+async def handle_user_cancel(alice_request):
+    return alice_request.response(
+        "Я знаю много редких слов. Могу загадать тебе несколько. Хочешь попробовать?",
+        buttons=start_buttons)
 
 # Заканчиваем игру по команде
 @dp.request_handler(commands=['конец игры'])
