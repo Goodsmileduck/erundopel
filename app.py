@@ -74,10 +74,9 @@ async def handle_user_stop(alice_request):
 @dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу'])
 async def handle_user_agrees(alice_request):
     user_id = alice_request.session.user_id
-    words_list = list(words.keys())
+    words_list = list(words.keys())[:7]
     shuffle(words_list)
     words_iter = iter(words_list)
-    words_iter = words_iter[:7]
     await dp.storage.update_data(user_id, words=words_iter)
 
     word = next(words_iter)
