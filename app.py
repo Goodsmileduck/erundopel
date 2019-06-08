@@ -54,10 +54,10 @@ async def handle_new_session(alice_request):
     logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
 
     return alice_request.response(
-        "Привет! Ерундопель - это игра где нужно угадать "
-        "правильное определение редких слов. Хочешь попробовать?",
-        tts="Привет! Ерундопель - это игра, где нужно угадать "
-        "правильное определение редких слов. Хочешь попробовать?",
+        "Привет! Абсурдопель - это игра где нужно угадать "
+        "правильное определение для слова. Хочешь попробовать?",
+        tts="Привет! Абсурдопель - это игра где нужно угадать "
+        "правильное определение для сл+ова. Хочешь попробовать?",
         buttons=start_buttons)
 
 # Не хочешь, не надо. Закрыть сессию
@@ -98,10 +98,10 @@ async def handle_user_agrees(alice_request):
         tts='Я назову слово - и - его определения'
         f' а вы должны выбрать один из вариантов и назвать его номер - .\n'
         f'Для завершения игр+ы скажите - "конец игр+ы" -.\n\n'
-        f'{word} - это:\n\n - '
-        f'1. - {exp_1}\n - '
-        f'2. - {exp_2}\n - '
-        f'3. - {exp_3}\n - ',
+        f'{word} - это:\n\n'
+        f'1. {exp_1}\n'
+        f'2. {exp_2}\n'
+        f'3. {exp_3}\n',
         buttons=choose_buttons)
 
 
@@ -128,11 +128,6 @@ async def handle_user_cancel(alice_request):
     return alice_request.response(
         f"Спасибо за игру!\n Правильных ответов: {right}\n"
         f"Неправильных ответов: {wrong}\n"
-        f"До встречи!",
-        tts='<speaker audio="alice-sounds-game-win-1.opus">'
-        f"Спасибо за игру! - "
-        f"Правильных ответов: {right}\n - "
-        f"Неправильных ответов: {wrong}\n - "
         f"До встречи!",
         end_session=True)
 
@@ -167,12 +162,6 @@ async def handle_user_answer(alice_request):
                 f'1. {exp_1}\n'
                 f'2. {exp_2}\n'
                 f'3. {exp_3}\n',
-                tts='Верно!\n\n'
-                f'Следующее слово.\n - '
-                f'{word} - это:\n\n - '
-                f'1. - {exp_1}\n - '
-                f'2. - {exp_2}\n - '
-                f'3. - {exp_3}\n - ',
                 buttons=choose_buttons)
         except StopIteration:
             right = data.get('right_answers')
@@ -183,15 +172,15 @@ async def handle_user_answer(alice_request):
                 f"Правильных ответов: {right}\n"
                 f"Неправильных ответов: {wrong}\n",
                 tts='<speaker audio="alice-sounds-game-win-1.opus">'
-                f"Вы ответили на все вопросы.\n - "
-                f"Спасибо за игру!\n - "
-                f"Правильных ответов: {right}\n - "
-                f"Неправильных ответов: {wrong}\n - ",
+                f"Вы ответили на все вопросы.\n"
+                f"Спасибо за игру!\n"
+                f"Правильных ответов: {right}\n"
+                f"Неправильных ответов: {wrong}\n",
                 end_session=True)
     else:
         wrong_answers = int(data.get('wrong_answers'))
         await dp.storage.update_data(user_id, wrong_answers=wrong_answers + 1)
-        return alice_request.response('Неверно! Попробуйте еще раз.',
+        return alice_request.response('Неверно! Попробуйте еще раз. ',
                                       buttons=choose_buttons)
 
 
