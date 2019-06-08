@@ -6,12 +6,12 @@ metadata:
   creationTimestamp: null
   labels:
     created-by-prow: "true"
-    event-GUID: 59feff7a-89db-11e9-9f2a-70e291aa524d
+    event-GUID: 501930d6-89f7-11e9-933e-b473cf33ec88
     prow.k8s.io/job: release
     prow.k8s.io/refs.org: Goodsmileduck
     prow.k8s.io/refs.repo: erundopel
     prow.k8s.io/type: postsubmit
-  name: cbe32528-89dc-11e9-a88e-a6e561f8bc53
+  name: d818fea0-89f7-11e9-a88e-a6e561f8bc53
 spec:
   agent: tekton
   cluster: default
@@ -19,13 +19,13 @@ spec:
   job: release
   namespace: jx
   refs:
-    base_link: https://github.com/Goodsmileduck/erundopel/compare/b5f3ce3f99dd...ef979b0ab474
+    base_link: https://github.com/Goodsmileduck/erundopel/compare/18183d0c4aa9...9bc241cc90c3
     base_ref: master
-    base_sha: ef979b0ab4744b4c9e0f9b30eac44293d9ed2918
+    base_sha: 9bc241cc90c356f347d5b4fcef4b8059432519fc
     org: Goodsmileduck
     repo: erundopel
   report: true
   type: postsubmit
 status:
-  startTime: "2019-06-08T11:01:41Z"
+  startTime: "2019-06-08T14:15:18Z"
   state: triggered
