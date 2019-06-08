@@ -1,0 +1,31 @@
+apiVersion: prow.k8s.io/v1
+kind: ProwJob
+metadata:
+  annotations:
+    prow.k8s.io/job: release
+  creationTimestamp: null
+  labels:
+    created-by-prow: "true"
+    event-GUID: 59feff7a-89db-11e9-9f2a-70e291aa524d
+    prow.k8s.io/job: release
+    prow.k8s.io/refs.org: Goodsmileduck
+    prow.k8s.io/refs.repo: erundopel
+    prow.k8s.io/type: postsubmit
+  name: cbe32528-89dc-11e9-a88e-a6e561f8bc53
+spec:
+  agent: tekton
+  cluster: default
+  context: release
+  job: release
+  namespace: jx
+  refs:
+    base_link: https://github.com/Goodsmileduck/erundopel/compare/b5f3ce3f99dd...ef979b0ab474
+    base_ref: master
+    base_sha: ef979b0ab4744b4c9e0f9b30eac44293d9ed2918
+    org: Goodsmileduck
+    repo: erundopel
+  report: true
+  type: postsubmit
+status:
+  startTime: "2019-06-08T11:01:41Z"
+  state: triggered
