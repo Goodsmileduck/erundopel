@@ -77,6 +77,7 @@ async def handle_user_agrees(alice_request):
     words_list = list(words.keys())
     shuffle(words_list)
     words_iter = iter(words_list)
+    words_iter = words_iter[:7]
     await dp.storage.update_data(user_id, words=words_iter)
 
     word = next(words_iter)
@@ -92,6 +93,7 @@ async def handle_user_agrees(alice_request):
     return alice_request.response(
         f'Я назову слово и перечислю определения,'
         f' а вы должны выбрать один из вариантов и назвать его номер.\n'
+        f'Всего будет семь слов.\n'
         f'Для завершения игры скажите "конец игры".\n\n'
         f'{word} - это:\n\n'
         f'1. {exp_1}\n'
@@ -99,6 +101,7 @@ async def handle_user_agrees(alice_request):
         f'3. {exp_3}\n',
         tts='Я назову слово - и - перечислю определения'
         f' а вы должны выбрать один из вариантов и назвать его номер - .\n'
+        f'Всего будет семь слов. - \n'
         f'Для завершения игр+ы скажите - "конец игр+ы" -.\n\n'
         f'{word} - это:\n\n - '
         f'1. - {exp_1}\n - '
