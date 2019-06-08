@@ -191,7 +191,7 @@ async def handle_user_answer(alice_request):
     else:
         wrong_answers = int(data.get('wrong_answers'))
         await dp.storage.update_data(user_id, wrong_answers=wrong_answers + 1)
-        return alice_request.response('Неверно! Попробуйте еще раз. ',
+        return alice_request.response('Неверно! Попробуйте еще раз.',
                                       buttons=choose_buttons)
 
 
