@@ -1,4 +1,4 @@
 apiVersion: v1
 description: A Helm chart for Kubernetes
-name: absurdopel
+name: erundopel
 version: v0.1.0
