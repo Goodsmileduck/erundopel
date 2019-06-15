@@ -31,6 +31,13 @@ ALL_ANSWERS = [["первый", "первый вариант", "один", "1"],
                ["второй", "второй вариант", "два", "2"],
                ["третий", "третий вариант", "три", "3"]]
 
+REVIEW_BUTTON = {
+    "title": "Поставить оценку",
+    "payload": {},
+    "url": "https://dialogs.yandex.ru/store/skills/9d9b2484-erundopel",
+    "hide": True
+}
+
 with open("words.csv", "r", encoding="utf8") as csvfile:
     data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
     words = {x["word"]: [x["answer"],
@@ -138,7 +145,7 @@ async def handle_user_cancel(alice_request):
         f"Правильных ответов: {right}\n - "
         f"Неправильных ответов: {wrong}\n - "
         f"До встречи!",
-        end_session=True)
+        end_session=, buttons=[REVIEW_BUTTON])
 
 
 @dp.request_handler(commands=[
