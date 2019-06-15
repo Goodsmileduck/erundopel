@@ -145,7 +145,7 @@ async def handle_user_cancel(alice_request):
         f"Правильных ответов: {right}\n - "
         f"Неправильных ответов: {wrong}\n - "
         f"До встречи!",
-        end_session=, buttons=[REVIEW_BUTTON])
+        end_session=True, buttons=[REVIEW_BUTTON])
 
 
 @dp.request_handler(commands=[
