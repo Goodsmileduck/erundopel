@@ -35,7 +35,7 @@ REVIEW_BUTTON = {
     "title": "Поставить оценку",
     "payload": {},
     "url": "https://dialogs.yandex.ru/store/skills/9d9b2484-erundopel",
-    "hide": True
+    "hide": False
 }
 
 with open("words.csv", "r", encoding="utf8") as csvfile:
