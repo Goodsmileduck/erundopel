@@ -81,8 +81,9 @@ async def handle_user_stop(alice_request):
 @dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу'])
 async def handle_user_agrees(alice_request):
     user_id = alice_request.session.user_id
-    words_list = list(words.keys())[:7]
-    shuffle(words_list)
+    all_words = list(words.keys())
+    shuffle(all_words)
+    words_list = all_words[:7]
     words_iter = iter(words_list)
     await dp.storage.update_data(user_id, words=words_iter)
 
@@ -198,7 +199,7 @@ async def handle_user_answer(alice_request):
                 f"Спасибо за игру!\n - "
                 f"Правильных ответов: {right}\n - "
                 f"Неправильных ответов: {wrong}\n - ",
-                end_session=True)
+                end_session=True, buttons=[REVIEW_BUTTON])
     else:
         wrong_answers = int(data.get('wrong_answers'))
         await dp.storage.update_data(user_id, wrong_answers=wrong_answers + 1)
