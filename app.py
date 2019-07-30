@@ -7,27 +7,6 @@ from aioalice import Dispatcher, get_new_configured_app, types
 from aioalice.dispatcher import MemoryStorage, SkipHandler
 from aioalice.utils.helper import Helper, HelperMode, Item
 
-import settings
-from motor.motor_asyncio import AsyncIOMotorClient
-
-
-mongo_client = AsyncIOMotorClient(settings.DB_HOST,
-                                  settings.DB_PORT,
-                                  maxPoolSize=settings.DB_MAX_POOL_SIZE)
-db = mongo_client[settings.DB_NAME]
-
-
-async def get_words():
-    words = db.words.aggregate([{$sample: {size: 7}}])
-    return words
-
-
-async def check_user(user_id):
-    if db.users.count_documents({'user_id': user_id}, limit=1) != 0:
-        return True
-    db.users.insert_one({'user_id'`: user_id})
-    return False
-
 WEBHOOK_URL_PATH = '/'  # webhook endpoint
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 5000
@@ -79,24 +58,16 @@ if LOG_LEVEL == logging.DEBUG:
 @dp.request_handler(func=lambda areq: areq.session.new)
 async def handle_new_session(alice_request):
     user_id = alice_request.session.user_id
-    exist = check_user(user_id)
-    if exist:
-        logging.info(f'Return for session!\nuser_id is {user_id!r}')
-        return alice_request.response(
-            "Как приятно что вы вернулись, готовы начать игру?",
-            tts="Как приятно что вы вернулись, готовы начать игру?",
-            buttons=start_buttons)
-    else:
-        logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
+    logging.info(f'Initialized new session!\nuser_id is {user_id!r}')
 
-        return alice_request.response(
-            "Привет! Ерундопель - это игра где нужно угадать "
-            "правильное определение редких слов.\n"
-            "Хочешь попробовать?",
-            tts="Привет! Ерундопель - это игра, где нужно угадать "
-            "правильное определение редких слов. - "
-            "Хочешь попробовать?",
-            buttons=start_buttons)
+    return alice_request.response(
+        "Привет! Ерундопель - это игра где нужно угадать "
+        "правильное определение редких слов.\n"
+        "Хочешь попробовать?",
+        tts="Привет! Ерундопель - это игра, где нужно угадать "
+        "правильное определение редких слов. - "
+        "Хочешь попробовать?",
+        buttons=start_buttons)
 
 # Не хочешь, не надо. Закрыть сессию
 @dp.request_handler(commands=['нет', 'не хочу'])
@@ -112,7 +83,7 @@ async def handle_user_agrees(alice_request):
     user_id = alice_request.session.user_id
     all_words = list(words.keys())
     shuffle(all_words)
-    words_list = await get_words()
+    words_list = all_words[:7]
     words_iter = iter(words_list)
     await dp.storage.update_data(user_id, words=words_iter)
 
