@@ -44,7 +44,7 @@ REVIEW_BUTTON = {
 }
 
 def get_words():
-    words = db.words.aggregate([{ $sample: { size: 5 } }])
+    words = db.words.aggregate([{ '$sample': { size: 5 } }])
     return words
 
 class Message:
