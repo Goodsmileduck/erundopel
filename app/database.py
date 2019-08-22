@@ -3,6 +3,7 @@ from settings import DB_HOST, DB_PORT, DB_NAME, DB_MAX_POOL_SIZE
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient, monitoring
 
+
 class CommandLogger(monitoring.CommandListener):
 
     def started(self, event):
