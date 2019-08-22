@@ -2,7 +2,7 @@ apiVersion: skaffold/v1beta2
 kind: Config
 build:
   artifacts:
-  - image: crp3htu2ntob6dl52795/absurdopel
+  - image: crp3htu2ntob6dl52795/erundopel
     context: .
     docker: {}
   tagPolicy:
@@ -21,8 +21,8 @@ profiles:
   deploy:
     helm:
       releases:
-      - name: absurdopel
-        chartPath: charts/absurdopel
+      - name: erundopel
+        chartPath: charts/erundopel
         setValueTemplates:
           image.repository: '{{.DOCKER_REGISTRY}}/{{.IMAGE_NAME}}'
           image.tag: '{{.DIGEST_HEX}}'
