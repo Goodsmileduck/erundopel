@@ -3,7 +3,7 @@ import os
 from envparse import env
 
 
-DB_HOST = env('DB_HOST', default='mongo.mongo')
+DB_HOST = env('DB_HOST', default='mongo-mongodb.mongo')
 DB_PORT = env('DB_PORT', cast=int, default=27017)
 DB_NAME = env('DB_NAME', default='erundopel')
 DB_MAX_POOL_SIZE = env('DB_MAX_POOL_SIZE', cast=int, default=300)
