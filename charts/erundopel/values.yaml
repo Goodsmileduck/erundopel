@@ -14,7 +14,7 @@ env:
 knativeDeploy: false
 
 service:
-  name: absurdopel
+  name: erundopel
   type: ClusterIP
   externalPort: 80
   internalPort: 8080
@@ -36,7 +36,7 @@ ingress:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     certmanager.k8s.io/cluster-issuer: "letsencrypt-staging"
     certmanager.k8s.io/acme-challenge-type: http01
-  domain: absurdopel.jx.kubeapp.ru
+  domain: erundopel.jx.kubeapp.ru
 probePath: /
 livenessProbe:
   initialDelaySeconds: 60
