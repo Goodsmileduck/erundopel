@@ -176,7 +176,7 @@ async def handle_user_cancel(alice_request):
 async def handle_user_cancel(alice_request):
     m = Message(alice_request)
     data = await dp.storage.get_data(m.user_id)
-    points = ште(data.get('points'))
+    points = int(data.get('points'))
     return alice_request.response(
         f"Спасибо за игру!\n Вы набрали очков: {points}.\n"
         f"До встречи!",
