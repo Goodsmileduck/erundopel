@@ -57,7 +57,7 @@ wrong_answers = ['Неверно! Попробуйте еще раз.',
 class States(Helper):
     mode = HelperMode.snake_case
 
-    NAME = Item()
+    START = Item()
 
 def get_words():
     logging.info('getting new words')
