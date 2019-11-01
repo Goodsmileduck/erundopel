@@ -30,7 +30,7 @@ logging.basicConfig(
 dp = Dispatcher(storage=MemoryStorage())
 
 start_buttons = ["Давай","Не хочу"]
-choose_buttons = ['первый', 'второй', 'третий', 'конец игры']
+choose_buttons = ['один', 'два', 'три', 'конец игры']
 
 ALL_ANSWERS = [["первый", "первый вариант", "один", "1"],
                ["второй", "второй вариант", "два", "2"],
@@ -149,10 +149,10 @@ async def handle_user_agrees(alice_request):
         f'неправильный лишаетесь одного очка.\n'
         f'Для завершения игр+ы скажите - "конец игр+ы" -.\n'
         f'Начнем!\n\n'
-        f'{word} - это:\n\n - '
-        f'1. - {e1}\n - - '
-        f'2. - {e2}\n - - '
-        f'3. - {e3}\n - - ',
+        f'{word} - это:\n\n sil<500>'
+        f'1. - {e1}\n sil<500> '
+        f'2. - {e2}\n sil<500> '
+        f'3. - {e3}\n sil<500> ',
         buttons=choose_buttons)
 
 
