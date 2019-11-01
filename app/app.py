@@ -30,7 +30,7 @@ logging.basicConfig(
 dp = Dispatcher(storage=MemoryStorage())
 
 start_buttons = ["Давай","Не хочу"]
-choose_buttons = ['один', 'два', 'три', 'конец игры']
+choose_buttons = ['один', 'два', 'три', 'повтори', 'стоп', 'помощь']
 
 ALL_ANSWERS = [["первый", "первый вариант", "один", "1"],
                ["второй", "второй вариант", "два", "2"],
@@ -53,6 +53,11 @@ greetings = ['Верно! 3 очка Гриффиндору!',
 wrong_answers = ['Неверно! Попробуйте еще раз.',
                  'Неправильный ответ. Минус одно очко. Выберите другой вариант.',
                  'Неугадали. Попробуйте другой вариант.']
+
+class States(Helper):
+    mode = HelperMode.snake_case
+
+    NAME = Item()
 
 def get_words():
     logging.info('getting new words')
@@ -88,6 +93,7 @@ async def handle_new_session(alice_request):
     m = Message(alice_request)
     logging.info(f'Initialized new session!\nuser_id is {m.user_id!r}')
     track_message(m.user_id, m.session_id, 'start', m.command, False)
+    await dp.storage.set_state(m.user_id, States.START)
     return alice_request.response(
         "Привет! Ерундопель - это игра где нужно угадать "
         "правильное определение редких слов.\n"
@@ -98,7 +104,7 @@ async def handle_new_session(alice_request):
         buttons=start_buttons)
 
 # Не хочешь, не надо. Закрыть сессию
-@dp.request_handler(commands=['нет', 'не хочу'])
+@dp.request_handler(commands=['нет', 'не хочу'], state=States.START)
 async def handle_user_stop(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, 'no', m.command, False)
@@ -108,9 +114,10 @@ async def handle_user_stop(alice_request):
 
 
 #Начинаем игру
-@dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу', 'начнем игру', 'еще', 'продолжить'])
+@dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу', 'начнем игру', 'еще', 'продолжить'], state=States.START)
 async def handle_user_agrees(alice_request):
     m = Message(alice_request)
+    await dp.storage.reset_state(m.user_id)
     track_message(m.user_id, m.session_id, 'start_game', m.command, False)
     words = get_words()
     await dp.storage.update_data(m.user_id, words_list=words)
@@ -126,17 +133,17 @@ async def handle_user_agrees(alice_request):
     e1 = exp["e1"]
     e2 = exp["e2"]
     e3 = exp["e3"]
-
-    await dp.storage.update_data(m.user_id, answer=exp['a'])
+    await dp.storage.update_data(m.user_id, answer=exp['a'], word=word, questions=[e1,e2,e3])
+    #await dp.storage.update_data(m.user_id, answer=exp['a'])
     await dp.storage.update_data(m.user_id, points=0)
-
+    
     return alice_request.response(
         f'Я назову слово и перечислю определения,'
         f' а вы должны выбрать один из вариантов и назвать его номер.\n'
         f'Всего будет пять слов.\n'
         f'За каждый правильный ответ, получаете 3 очка, за каждый '
         f'неправильный лишаетесь 1го очка.\n'
-        f'Для завершения игры скажите "конец игры".\n'
+        f'Для завершения игры скажите "стоп".\n'
         f'Начнем!\n\n'
         f'{word} - это:\n\n'
         f'1. {e1}\n'
@@ -147,7 +154,7 @@ async def handle_user_agrees(alice_request):
         f'Всего будет пять слов. - \n'
         f'За каждый правильный ответ, получаете 3 очка, за каждый '
         f'неправильный лишаетесь одного очка.\n'
-        f'Для завершения игр+ы скажите - "конец игр+ы" -.\n'
+        f'Для завершения игр+ы скажите - "стоп" -.\n'
         f'Начнем!\n\n'
         f'{word} - это:\n\n sil<500>'
         f'1. - {e1}\n sil<500> '
@@ -158,13 +165,21 @@ async def handle_user_agrees(alice_request):
 
 # Немного вариативности
 @dp.request_handler(commands=['привет', 'как дела'])
-async def handle_user_cancel(alice_request):
+async def handle_user_hi(alice_request):
     return alice_request.response(
-        "Так-то мы здесь поиграть собрались, а ну-ка давайте начнем игру?",
+        "Так-то мы здесь поиграть собрались, а давайте начнем игру?",
         buttons=start_buttons)
 
+@dp.request_handler(commands=['помощь'])
+async def handle_user_help(alice_request):
+    m = Message(alice_request)
+    track_message(m.user_id, m.session_id, 'help', m.command, False)
+    return alice_request.response(
+        'Cкажите номер варианта ответа, "повтори"" или "стоп".',
+        buttons=choose_buttons)
+
 @dp.request_handler(commands=['помощь', 'что ты умеешь', 'что ты умеешь?'])
-async def handle_user_cancel(alice_request):
+async def handle_user_what(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, 'help', m.command, False)
     return alice_request.response(
@@ -172,7 +187,7 @@ async def handle_user_cancel(alice_request):
         buttons=start_buttons)
 
 # Заканчиваем игру по команде
-@dp.request_handler(commands=['конец игры'])
+@dp.request_handler(commands=['конец игры', 'стоп', 'стой'])
 async def handle_user_cancel(alice_request):
     m = Message(alice_request)
     data = await dp.storage.get_data(m.user_id)
@@ -208,7 +223,7 @@ async def handle_user_answer(alice_request):
             e2 = exp["e2"]
             e3 = exp["e3"]
 
-            await dp.storage.update_data(m.user_id, answer=exp['a'])
+            await dp.storage.update_data(m.user_id, answer=exp['a'], word=word, questions=[e1,e2,e3])
             points = int(data.get('points')) + 3
             await dp.storage.update_data(m.user_id,
                                          points=points)
@@ -252,6 +267,27 @@ async def handle_user_answer(alice_request):
             f'{wrong_answer}',
             buttons=choose_buttons)
 
+@dp.request_handler(commands=[
+    "повтори", "повтор", "повтори пожалуйста",
+    "пожалуйста повтори", "можешь повторить", "можешь повторить?"])
+async def handle_user_repeat(alice_request):
+    m = Message(alice_request)
+    track_message(m.user_id, m.session_id, 'repeat', m.command, False)
+    data = await dp.storage.get_data(m.user_id)
+    questions = data.get('questions')
+    word = data.get('word')
+    greeting = choice(greetings)
+    return alice_request.response(
+        f'{word} - это:\n\n'
+        f'1. {questions[0]}\n'
+        f'2. {questions[1]}\n'
+        f'3. {questions[2]}\n',
+        tts=''
+        f'{word} - это:\n\n - '
+        f'1. - {questions[0]}\n - '
+        f'2. - {questions[1]}\n - '
+        f'3. - {questions[2]}\n - ',
+        buttons=choose_buttons)
 
 # Все остальные запросы попадают сюда
 @dp.request_handler()
@@ -259,8 +295,7 @@ async def handle_all_other_requests(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, None, m.command, True)
     return alice_request.response(
-        'Я не понимаю, твой запрос. Попробуй снова.'
-        'Если хотите начать игру заново, скажите "начать игру"'
+        'Cкажите номер варианта ответа, "повтори"" или "стоп".'
     )
 
 
