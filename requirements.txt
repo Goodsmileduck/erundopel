@@ -1,3 +1,4 @@
+attrs==18.1.0
 aioalice==1.2.4
 motor==2.0
 envparse==0.2.0
