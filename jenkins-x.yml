@@ -5,7 +5,7 @@ pipelineConfig:
       promote:
         replace: true
         steps:
-        - dir: ./charts/REPLACE_ME_APP_NAME
+        - dir: ./charts/erundopel
           steps:
           - sh: jx step changelog --version v\$(cat ../../VERSION)
             name: changelog
