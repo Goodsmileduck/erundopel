@@ -108,7 +108,7 @@ async def handle_user_stop(alice_request):
 
 
 #Начинаем игру
-@dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу', 'начнем игру'])
+@dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу', 'начнем игру', 'еще', 'продолжить'])
 async def handle_user_agrees(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, 'start_game', m.command, False)
