@@ -92,7 +92,7 @@ async def send_pong(alice_request):
 async def handle_new_session(alice_request):
     m = Message(alice_request)
     logging.info(f'Initialized new session!\nuser_id is {m.user_id!r}')
-    track_message(m.user_id, m.session_id, 'start', m.command, False)
+    #track_message(m.user_id, m.session_id, 'start', m.command, False)
     await dp.storage.set_state(m.user_id, States.START)
     return alice_request.response(
         "Привет! Ерундопель - это игра где нужно угадать "
