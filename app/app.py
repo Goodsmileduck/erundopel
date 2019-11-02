@@ -154,12 +154,13 @@ async def handle_user_agrees(alice_request):
         f'Всего будет пять слов. - \n'
         f'За каждый правильный ответ, получаете 3 очка, за каждый '
         f'неправильный лишаетесь одного очка.\n'
-        f'Для завершения игр+ы скажите - "стоп" -.\n'
+        f'Чтобы повторить скажи "повтори".\n'
+        f'Для завершения игр+ы скажите - "стоп" sil<[500]>.\n'
         f'Начнем!\n\n'
         f'{word} - это:\n\n sil<[500]>'
-        f'1. - {e1}\n sil<[500]> '
-        f'2. - {e2}\n sil<[500]> '
-        f'3. - {e3}\n sil<[500]> ',
+        f'1. sil<[500]> {e1}\n sil<[500]> '
+        f'2. sil<[500]> {e2}\n sil<[500]> '
+        f'3. sil<[500]> {e3}\n sil<[500]> ',
         buttons=choose_buttons)
 
 
@@ -283,10 +284,10 @@ async def handle_user_repeat(alice_request):
         f'2. {questions[1]}\n'
         f'3. {questions[2]}\n',
         tts=''
-        f'{word} - это:\n\n - '
-        f'1. - {questions[0]}\n - '
-        f'2. - {questions[1]}\n - '
-        f'3. - {questions[2]}\n - ',
+        f'{word} - это:\n\n sil<[500]> '
+        f'1. sil<[500]> {questions[0]}\n sil<[500]> '
+        f'2. sil<[500]> {questions[1]}\n sil<[500]> '
+        f'3. sil<[500]> {questions[2]}\n sil<[500]> ',
         buttons=choose_buttons)
 
 # Все остальные запросы попадают сюда
