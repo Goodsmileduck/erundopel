@@ -70,7 +70,7 @@ class Message:
         self.session_id = alice_request.session.session_id
         self.command = alice_request.request.command
 
-if LOG_LEVELf == logging.DEBUG:
+if LOG_LEVEL == logging.DEBUG:
     @dp.request_handler()
     async def take_all_requests(alice_request):
         # Логгируем запрос. Можно записывать в БД и тд
