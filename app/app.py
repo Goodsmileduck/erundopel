@@ -176,7 +176,7 @@ async def handle_user_help(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, 'help', m.command, False)
     return alice_request.response(
-        'Cкажите номер варианта ответа, "повтори"" или "стоп".',
+        'Скажите номер варианта ответа, "повтори"" или "стоп".',
         buttons=choose_buttons)
 
 @dp.request_handler(commands=['помощь', 'что ты умеешь', 'что ты умеешь?'])
@@ -296,7 +296,7 @@ async def handle_all_other_requests(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, None, m.command, True)
     return alice_request.response(
-        'Cкажите номер варианта ответа, "повтори"" или "стоп".'
+        'Скажите номер варианта ответа, "повтори"" или "стоп".'
     )
 
 
