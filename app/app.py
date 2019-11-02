@@ -70,7 +70,7 @@ class Message:
         self.session_id = alice_request.session.session_id
         self.command = alice_request.request.command
 
-if LOG_LEVEL == logging.DEBUG:
+if LOG_LEVELf == logging.DEBUG:
     @dp.request_handler()
     async def take_all_requests(alice_request):
         # Логгируем запрос. Можно записывать в БД и тд
@@ -156,10 +156,10 @@ async def handle_user_agrees(alice_request):
         f'неправильный лишаетесь одного очка.\n'
         f'Для завершения игр+ы скажите - "стоп" -.\n'
         f'Начнем!\n\n'
-        f'{word} - это:\n\n sil<500>'
-        f'1. - {e1}\n sil<500> '
-        f'2. - {e2}\n sil<500> '
-        f'3. - {e3}\n sil<500> ',
+        f'{word} - это:\n\n sil<[500]>'
+        f'1. - {e1}\n sil<[500]> '
+        f'2. - {e2}\n sil<[500]> '
+        f'3. - {e3}\n sil<[500]> ',
         buttons=choose_buttons)
 
 
@@ -238,11 +238,11 @@ async def handle_user_answer(alice_request):
                 f'3. {e3}\n',
                 tts=''
                 f'{greeting}\n\n'
-                f'Следующее слово.\n - '
-                f'{word} - это:\n\n - '
-                f'1. - {e1}\n - '
-                f'2. - {e2}\n - '
-                f'3. - {e3}\n - ',
+                f'Следующее слово.\n sil<[500]> '
+                f'{word} - это:\n\n sil<[500]> '
+                f'1. sil<[500]> {e1}\n sil<[500]> '
+                f'2. sil<[500]> {e2}\n sil<[500]> '
+                f'3. sil<[500]> {e3}\n sil<[500]> ',
                 buttons=choose_buttons)
         except StopIteration:
             points = int(data.get('points')) + 3
