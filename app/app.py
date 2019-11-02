@@ -40,7 +40,7 @@ DIALOG_ID = '7e17c278-f191-4d77-96ec-bcd55c45a5a2'
 DIALOG_URL = "https://dialogs.yandex.ru/store/skills/9d9b2484-erundopel"
 
 REVIEW_BUTTON = {
-    "title": "Поставить оценку",
+    "title": "Поддержи навык - поставь оценку!",
     "payload": "review",
     "url": DIALOG_URL,
     "hide": False
