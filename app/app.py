@@ -70,14 +70,6 @@ class Message:
         self.session_id = alice_request.session.session_id
         self.command = alice_request.request.command
 
-if LOG_LEVEL == logging.DEBUG:
-    @dp.request_handler()
-    async def take_all_requests(alice_request):
-        # Логгируем запрос. Можно записывать в БД и тд
-        logging.debug('New request! %r', alice_request)
-        # Поднимаем исключение, по которому обработка перейдёт
-        # к следующему хэндлеру, у которого подойдут фильтры
-        raise SkipHandler
 
 @aio.time(REQ_TIME.labels(response='ping'))
 @dp.request_handler(commands='ping')
@@ -92,7 +84,7 @@ async def send_pong(alice_request):
 async def handle_new_session(alice_request):
     m = Message(alice_request)
     logging.info(f'Initialized new session!\nuser_id is {m.user_id!r}')
-    #track_message(m.user_id, m.session_id, 'start', m.command, False)
+    track_message(m.user_id, m.session_id, 'start', m.command, False)
     await dp.storage.set_state(m.user_id, States.START)
     return alice_request.response(
         "Привет! Ерундопель - это игра где нужно угадать "
@@ -103,21 +95,21 @@ async def handle_new_session(alice_request):
         "Хочешь попробовать?",
         buttons=start_buttons)
 
-# Не хочешь, не надо. Закрыть сессию
-@dp.request_handler(commands=['нет', 'не хочу'], state=States.START)
-async def handle_user_stop(alice_request):
-    m = Message(alice_request)
-    track_message(m.user_id, m.session_id, 'no', m.command, False)
-    return alice_request.response("Жаль, возвращайтесь как решите сыграть.\n"
-                                  "До встречи!",
-                                  end_session=True)
-
 
 #Начинаем игру
-@dp.request_handler(commands=['давай', 'начать игру', 'да', 'хочу', 'начнем игру', 'еще', 'продолжить'], state=States.START)
+@dp.request_handler(state=States.START)
 async def handle_user_agrees(alice_request):
+    if alice_request.request.command == "ping":
+        return alice_request.response('pong')
     m = Message(alice_request)
+    no_list = ['нет', 'не хочу']
+    yes_list = ['давай', 'начать игру', 'да', 'хочу', 'начнем игру', 'еще', 'продолжить']
     await dp.storage.reset_state(m.user_id)
+    if m.command in no_list:
+        track_message(m.user_id, m.session_id, 'no', m.command, False)
+        return alice_request.response("Жаль, возвращайтесь как решите сыграть.\n"
+                                      "До встречи!",
+                                      end_session=True)
     track_message(m.user_id, m.session_id, 'start_game', m.command, False)
     words = get_words()
     await dp.storage.update_data(m.user_id, words_list=words)
