@@ -76,10 +76,10 @@ class Message:
 async def send_pong(alice_request):
     user_id = alice_request.session.user_id
     logging.info(f"Ping from {user_id}")
-    return alice_request.response('pong')
+    return alice_request.response('pong',end_session=True)
 
 # Новая сессия. Приветствуем пользователя
-@aio.time(REQ_TIME.labels(response='start'))
+@aio.time(REQ_TIME.labels(response='init'))
 @dp.request_handler(func=lambda areq: areq.session.new)
 async def handle_new_session(alice_request):
     m = Message(alice_request)
@@ -97,6 +97,7 @@ async def handle_new_session(alice_request):
 
 
 #Начинаем игру
+@aio.time(REQ_TIME.labels(response='start'))
 @dp.request_handler(state=States.START)
 async def handle_user_agrees(alice_request):
     if alice_request.request.command == "ping":
