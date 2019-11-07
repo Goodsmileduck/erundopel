@@ -157,7 +157,7 @@ async def handle_user_agrees(alice_request):
         f'Чтобы повторить скажи "повтори".\n'
         f'Для завершения игр+ы скажите - "стоп" sil<[500]>.\n'
         f'Начнем!\n\n'
-        f'{word} - это:\n\n sil<[500]>'
+        f'{word} - это:\n\n sil<[500]> '
         f'1. sil<[500]> {e1}\n sil<[500]> '
         f'2. sil<[500]> {e2}\n sil<[500]> '
         f'3. sil<[500]> {e3}\n sil<[500]> ',
