@@ -70,6 +70,13 @@ class Message:
         self.session_id = alice_request.session.session_id
         self.command = alice_request.request.command
 
+@dp.request_handler()
+async def take_all_requests(alice_request):
+    # Логгируем запрос. Можно записывать в БД и тд
+    logging.debug('New request! %r', alice_request)
+    # Поднимаем исключение, по которому обработка перейдёт
+    # к следующему хэндлеру, у которого подойдут фильтры
+    raise SkipHandler
 
 @aio.time(REQ_TIME.labels(response='ping'))
 @dp.request_handler(commands='ping')
