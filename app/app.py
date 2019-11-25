@@ -242,6 +242,7 @@ async def handle_user_answer(alice_request):
                 f'3. {e3}\n',
                 tts=''
                 f'{greeting}\n\n'
+                f'{previous_word} - {right_choice}.'
                 f'Следующее слово.\n sil<[500]> '
                 f'{word} - это:\n\n sil<[500]> '
                 f'1. sil<[500]> {e1}\n sil<[500]> '
