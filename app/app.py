@@ -214,6 +214,8 @@ async def handle_user_answer(alice_request):
     words = data.get('words_list')
     words_iter = data.get('words')
     get_answer = int(data.get('answer')) - 1
+    previous_word = data.get('word')
+    right_choice = data.get('questions')[get_answer]
 
     answer_list = ALL_ANSWERS[get_answer]
     if alice_request.request.command in answer_list:
@@ -231,6 +233,7 @@ async def handle_user_answer(alice_request):
             greeting = choice(greetings)
             return alice_request.response(
                 f'{greeting}\n'
+                f'{previous_word} - {right_choice}\n'
                 f'Очки: {points}\n\n'
                 f'Следующее слово.\n'
                 f'{word} - это:\n\n'
@@ -248,6 +251,7 @@ async def handle_user_answer(alice_request):
         except StopIteration:
             points = int(data.get('points')) + 3
             return alice_request.response(
+                f"{previous_word} - {right_choice}"
                 f"Вы ответили на все вопросы.\n"
                 f"Спасибо за игру!\n"
                 f"Вы набрали очков: {points}\n",
