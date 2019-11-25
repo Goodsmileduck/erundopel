@@ -232,8 +232,8 @@ async def handle_user_answer(alice_request):
                                          points=points)
             greeting = choice(greetings)
             return alice_request.response(
+                f'{previous_word} - {right_choice}.\n'
                 f'{greeting}\n'
-                f'{previous_word} - {right_choice}\n'
                 f'Очки: {points}\n\n'
                 f'Следующее слово.\n'
                 f'{word} - это:\n\n'
@@ -241,8 +241,8 @@ async def handle_user_answer(alice_request):
                 f'2. {e2}\n'
                 f'3. {e3}\n',
                 tts=''
-                f'{greeting}\n\n'
                 f'{previous_word} - {right_choice}.'
+                f'{greeting}\n\n'
                 f'Следующее слово.\n sil<[500]> '
                 f'{word} - это:\n\n sil<[500]> '
                 f'1. sil<[500]> {e1}\n sil<[500]> '
@@ -252,7 +252,7 @@ async def handle_user_answer(alice_request):
         except StopIteration:
             points = int(data.get('points')) + 3
             return alice_request.response(
-                f"{previous_word} - {right_choice}"
+                f"{previous_word} это: {right_choice}."
                 f"Вы ответили на все вопросы.\n"
                 f"Спасибо за игру!\n"
                 f"Вы набрали очков: {points}\n",
