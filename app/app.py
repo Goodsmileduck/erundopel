@@ -270,8 +270,17 @@ async def handle_user_answer(alice_request):
                 end_session=True, buttons=[REVIEW_BUTTON])
     else:
         failed = int(data.get('failed'))
-        if failed > 2:
-            await dp.storage.update_data(m.user_id, failed=0)
+        if failed >= 2:
+            points = int(data.get('points')) - 1
+            await dp.storage.update_data(m.user_id, failed=0, points=points)
+            
+            word = next(words_iter)
+            exp = [element for element in words if element['word'] == word][0]
+            e1 = exp["e1"]
+            e2 = exp["e2"]
+            e3 = exp["e3"]
+            await dp.storage.update_data(m.user_id, answer=exp['a'], word=word, questions=[e1,e2,e3])
+            
             fails = ["К сожалению у тебя 2 ошибки, пропустим это слово.",
                      "Простите у вас 2 ошибки подряд, перейдем к следующему слову.",
                      "2 ошибки подряд, в следущий раз повезет."]
