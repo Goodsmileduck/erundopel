@@ -281,7 +281,7 @@ async def handle_user_answer(alice_request):
             e3 = exp["e3"]
             await dp.storage.update_data(m.user_id, answer=exp['a'], word=word, questions=[e1,e2,e3])
             
-            fails = ["Снова неверно. К сожалению у вас две ошибки подряд.",
+            fails = ["Снова неверно. К сожалению, у вас две ошибки подряд.",
                      "Неправильно. Простите у вас две ошибки подряд.",
                      "Неверно. Две ошибки подряд, в следущий раз повезет."]
             fail = choice(fails)
