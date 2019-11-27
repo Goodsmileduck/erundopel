@@ -135,7 +135,7 @@ async def handle_user_agrees(alice_request):
     e3 = exp["e3"]
     await dp.storage.update_data(m.user_id, answer=exp['a'], word=word, questions=[e1,e2,e3])
     #await dp.storage.update_data(m.user_id, answer=exp['a'])
-    await dp.storage.update_data(m.user_id, points=0)
+    await dp.storage.update_data(m.user_id, points=0, failed=0)
     
     return alice_request.response(
         f'Я назову слово и перечислю 3 определения,'
