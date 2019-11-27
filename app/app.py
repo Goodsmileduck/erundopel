@@ -138,7 +138,7 @@ async def handle_user_agrees(alice_request):
     await dp.storage.update_data(m.user_id, points=0)
     
     return alice_request.response(
-        f'Я назову слово и перечислю определения,'
+        f'Я назову слово и перечислю 3 определения,'
         f' а вы должны выбрать один из вариантов и назвать его номер.\n'
         f'Всего будет пять слов.\n'
         f'За каждый правильный ответ, получаете 3 очка, за каждый '
@@ -149,7 +149,7 @@ async def handle_user_agrees(alice_request):
         f'1. {e1}\n'
         f'2. {e2}\n'
         f'3. {e3}\n',
-        tts='Я назову слово - и - перечислю определения'
+        tts='Я назову слово - и - перечислю 3 определения'
         f' а вы должны выбрать один из вариантов и назвать его номер - .\n'
         f'Всего будет пять слов. - \n'
         f'За каждый правильный ответ, получаете 3 очка, за каждый '
@@ -170,6 +170,13 @@ async def handle_user_hi(alice_request):
     return alice_request.response(
         "Так-то мы здесь поиграть собрались, а давайте начнем игру?",
         buttons=start_buttons)
+
+#Верните Алису
+@dp.request_handler(contains=['алиса'])
+async def handle_hi_alisa(alice_request):
+    return alice_request.response(
+        'Вы в игре Ерундопель, чтобы поговорить с Алисой скажите "хватит" или "Алиса, вернись".',
+        buttons=['помощь', 'хватит'])
 
 @dp.request_handler(commands=['помощь'])
 async def handle_user_help(alice_request):
@@ -329,7 +336,7 @@ async def handle_all_other_requests(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, None, m.command, True)
     return alice_request.response(
-        'Скажите номер варианта ответа, "повтори"" или "стоп".'
+        'Скажите номер варианта (один, два или три), "повтори"" или "стоп".'
     )
 
 
