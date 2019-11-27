@@ -269,7 +269,7 @@ async def handle_user_answer(alice_request):
                 f"Вы набрали очков: {points}\n - ",
                 end_session=True, buttons=[REVIEW_BUTTON])
     else:
-        failded = int(data.get('failed'))
+        failed = int(data.get('failed'))
         if failed > 2:
             await dp.storage.update_data(m.user_id, failed=0)
             fails = ["К сожалению у тебя 2 ошибки, пропустим это слово.",
