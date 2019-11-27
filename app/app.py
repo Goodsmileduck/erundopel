@@ -229,7 +229,7 @@ async def handle_user_answer(alice_request):
             await dp.storage.update_data(m.user_id, answer=exp['a'], word=word, questions=[e1,e2,e3])
             points = int(data.get('points')) + 3
             await dp.storage.update_data(m.user_id,
-                                         points=points)
+                                         points=points, failed=0)
             greeting = choice(greetings)
             return alice_request.response(
                 f'{previous_word} - {right_choice}.\n'
@@ -262,16 +262,44 @@ async def handle_user_answer(alice_request):
                 f"Вы набрали очков: {points}\n - ",
                 end_session=True, buttons=[REVIEW_BUTTON])
     else:
-        points = int(data.get('points')) -1 
-        wrong_answer = choice(wrong_answers)
-        await dp.storage.update_data(m.user_id,
-                                     points=points)
-        return alice_request.response(
-            f'{wrong_answer}\n'
-            f'Очки: {points}',
-            tts=''
-            f'{wrong_answer}',
-            buttons=choose_buttons)
+        failded = int(data.get('failed'))
+        if failed > 2:
+            await dp.storage.update_data(m.user_id, failed=0)
+            fails = ["К сожалению у тебя 2 ошибки, пропустим это слово.",
+                     "Простите у вас 2 ошибки подряд, перейдем к следующему слову.",
+                     "2 ошибки подряд, в следущий раз повезет."]
+            fail = choice(fails)
+            return alice_request.response(
+                f'{previous_word} - {right_choice}.\n'
+                f'{fail}\n'
+                f'Очки: {points}\n\n'
+                f'Следующее слово.\n'
+                f'{word} - это:\n\n'
+                f'1. {e1}\n'
+                f'2. {e2}\n'
+                f'3. {e3}\n',
+                tts=''
+                f'{previous_word} - {right_choice}.'
+                f'{fail}\n\n'
+                f'Следующее слово.\n sil<[500]> '
+                f'{word} - это:\n\n sil<[500]> '
+                f'1. sil<[500]> {e1}\n sil<[500]> '
+                f'2. sil<[500]> {e2}\n sil<[500]> '
+                f'3. sil<[500]> {e3}\n sil<[500]> ',
+                buttons=choose_buttons)
+        else:
+            failed += 1
+            await dp.storage.update_data(m.user_id, failed=failed)
+            points = int(data.get('points')) -1 
+            wrong_answer = choice(wrong_answers)
+            await dp.storage.update_data(m.user_id,
+                                         points=points)
+            return alice_request.response(
+                f'{wrong_answer}\n'
+                f'Очки: {points}',
+                tts=''
+                f'{wrong_answer}',
+                buttons=choose_buttons)
 
 @dp.request_handler(commands=[
     "повтори", "повтор", "повтори пожалуйста",
