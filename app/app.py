@@ -281,13 +281,13 @@ async def handle_user_answer(alice_request):
             e3 = exp["e3"]
             await dp.storage.update_data(m.user_id, answer=exp['a'], word=word, questions=[e1,e2,e3])
             
-            fails = ["К сожалению у вас две ошибки, пропустим это слово.",
-                     "Простите у вас две ошибки подряд, перейдем к следующему слову.",
-                     "Две ошибки подряд, в следущий раз повезет."]
+            fails = ["Снова неверно. К сожалению у вас две ошибки подряд.",
+                     "Неправильно. Простите у вас две ошибки подряд.",
+                     "Неверно. Две ошибки подряд, в следущий раз повезет."]
             fail = choice(fails)
             return alice_request.response(
-                f'{previous_word} - {right_choice}.\n'
                 f'{fail}\n'
+                f'{previous_word} - {right_choice}.\n'
                 f'Очки: {points}\n\n'
                 f'Следующее слово.\n'
                 f'{word} - это:\n\n'
@@ -295,8 +295,8 @@ async def handle_user_answer(alice_request):
                 f'2. {e2}\n'
                 f'3. {e3}\n',
                 tts=''
-                f'{previous_word} - {right_choice}.'
                 f'{fail}\n\n'
+                f'{previous_word} - {right_choice}.'
                 f'Следующее слово.\n sil<[500]> '
                 f'{word} - это:\n\n sil<[500]> '
                 f'1. sil<[500]> {e1}\n sil<[500]> '
