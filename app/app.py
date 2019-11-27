@@ -295,9 +295,9 @@ async def handle_user_answer(alice_request):
                 f'3. sil<[500]> {e3}\n sil<[500]> ',
                 buttons=choose_buttons)
         else:
-            failed += 1
+            failed = failed + 1
             await dp.storage.update_data(m.user_id, failed=failed)
-            points = int(data.get('points')) -1 
+            points = int(data.get('points')) - 1 
             wrong_answer = choice(wrong_answers)
             await dp.storage.update_data(m.user_id,
                                          points=points)
