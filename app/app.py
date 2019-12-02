@@ -32,9 +32,9 @@ dp = Dispatcher(storage=MemoryStorage())
 start_buttons = ["Давай","Не хочу"]
 choose_buttons = ['один', 'два', 'три', 'повтори', 'стоп', 'помощь']
 
-ALL_ANSWERS = [["первый", "первый вариант", "один", "1"],
-               ["второй", "второй вариант", "два", "2"],
-               ["третий", "третий вариант", "три", "3"]]
+ALL_ANSWERS = [["первый", "первый вариант", "один", "1", "1 1"],
+               ["второй", "второй вариант", "два", "2", "2 2"],
+               ["третий", "третий вариант", "три", "3", "3 3"]]
 
 DIALOG_ID = '7e17c278-f191-4d77-96ec-bcd55c45a5a2'
 DIALOG_URL = "https://dialogs.yandex.ru/store/skills/9d9b2484-erundopel"
@@ -209,11 +209,52 @@ async def handle_user_cancel(alice_request):
         f"До встречи!",
         end_session=True, buttons=[REVIEW_BUTTON])
 
+@dp.request_handler(contains=['дальше', 'следующее', 'следующий'])
+async def handle_next(alice_request):
+    m = Message(alice_request)
+    track_message(m.user_id, m.session_id, 'next', m.command, False)
+    data = await dp.storage.get_data(m.user_id)
+    words = data.get('words_list')
+    words_iter = data.get('words')
+    get_answer = int(data.get('answer')) - 1
+    previous_word = data.get('word')
+    right_choice = data.get('questions')[get_answer]
+    
+    word = next(words_iter)
+    exp = [element for element in words if element['word'] == word][0]
+    e1 = exp["e1"]
+    e2 = exp["e2"]
+    e3 = exp["e3"]
+    await dp.storage.update_data(m.user_id, 
+        answer=exp['a'], word=word, questions=[e1,e2,e3], failed=0)
+    
+    skipped =  ["Хорошо. Пропустим слово.",
+                "Пропускаем. Вы не получаете очков.",
+                "Не страшно. Пропускаем слово."]
+    skip = choice(skipped)
+    return alice_request.response(
+        f'{skip}\n'
+        f'{previous_word} - {right_choice}.\n'
+        f'Очки: {points}\n\n'
+        f'Следующее слово.\n'
+        f'{word} - это:\n\n'
+        f'1. {e1}\n'
+        f'2. {e2}\n'
+        f'3. {e3}\n',
+        tts=''
+        f'{skip}\n\n'
+        f'{previous_word} - {right_choice}.'
+        f'Следующее слово.\n sil<[500]> '
+        f'{word} - это:\n\n sil<[500]> '
+        f'1. sil<[500]> {e1}\n sil<[500]> '
+        f'2. sil<[500]> {e2}\n sil<[500]> '
+        f'3. sil<[500]> {e3}\n sil<[500]> ',
+        buttons=choose_buttons)
 
 @dp.request_handler(commands=[
-    "первый", "первый вариант", "один", "1",
-    "второй", "второй вариант", "два", "2",
-    "третий", "третий вариант", "три", "3"])
+    "первый", "первый вариант", "один", "1", "1 1",
+    "второй", "второй вариант", "два", "2", "2 2 ",
+    "третий", "третий вариант", "три", "3", "3 3"])
 async def handle_user_answer(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, 'choice', m.command, False)
@@ -319,7 +360,7 @@ async def handle_user_answer(alice_request):
 
 @dp.request_handler(commands=[
     "повтори", "повтор", "повтори пожалуйста",
-    "пожалуйста повтори", "можешь повторить", "можешь повторить?"])
+    "пожалуйста повтори", "можешь повторить", "можешь повторить?", "да", "ладно"])
 async def handle_user_repeat(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, 'repeat', m.command, False)

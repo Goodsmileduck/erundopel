@@ -14,4 +14,4 @@ WEBAPP_PORT = 5000
 
 LOG_LEVEL = env('LOG_LEVEL', default='DEBUG')
 
-CHATBASE_API = env('CHATBASE_API', default='254f1d6d-17f6-493a-bfb5-9fe2abbcfb7e')
+CHATBASE_API = env('CHATBASE_API', default='paste it here')
