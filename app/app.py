@@ -209,11 +209,12 @@ async def handle_user_cancel(alice_request):
         f"До встречи!",
         end_session=True, buttons=[REVIEW_BUTTON])
 
-@dp.request_handler(contains=['дальше', 'следующее', 'следующий'])
+@dp.request_handler(contains=['дальше', 'следующее', 'следующая', 'следующий'])
 async def handle_next(alice_request):
     m = Message(alice_request)
     track_message(m.user_id, m.session_id, 'next', m.command, False)
     data = await dp.storage.get_data(m.user_id)
+    points = int(data.get('points')) - 1
     words = data.get('words_list')
     words_iter = data.get('words')
     get_answer = int(data.get('answer')) - 1
@@ -226,7 +227,7 @@ async def handle_next(alice_request):
     e2 = exp["e2"]
     e3 = exp["e3"]
     await dp.storage.update_data(m.user_id, 
-        answer=exp['a'], word=word, questions=[e1,e2,e3], failed=0)
+        answer=exp['a'], word=word, questions=[e1,e2,e3], failed=0, points=points)
     
     skipped =  ["Хорошо. Пропустим слово.",
                 "Пропускаем. Вы не получаете очков.",
