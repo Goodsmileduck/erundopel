@@ -1,5 +1,5 @@
-attrs==18.1.0
-aioalice==1.2.4
+#attrs==18.1.0
+aioalice==1.3.0
 motor==2.0
 envparse==0.2.0
 aiohttp_healthcheck==1.3.1
