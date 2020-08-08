@@ -1,0 +1,33 @@
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mcredential-initializer[0m
+{"level":"info","ts":1596873224.6665986,"caller":"creds-init/main.go:44","msg":"Credentials initialized."}
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mworking-dir-initializer[0m
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mplace-tools[0m
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mstep-git-source-goodsmileduck-erundopel-master-lfxwr-jf2rh[0m
+{"level":"info","ts":1596873235.60197,"caller":"git/git.go:105","msg":"Successfully cloned https://github.com/*************/erundopel.git @ v0.0.80 in path /workspace/source"}
+{"level":"warn","ts":1596873235.6020706,"caller":"git/git.go:152","msg":"Unexpected error: creating symlink: symlink /tekton/home/.ssh /root/.ssh: file exists"}
+{"level":"info","ts":1596873235.6421177,"caller":"git/git.go:133","msg":"Successfully initialized and updated submodules in path /workspace/source"}
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mstep-setup-builder-home[0m
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mstep-git-merge[0m
+Using SHAs from PULL_REFS=master:75508543f87eb9c49ed8c83900a1a74157e01f13
+WARNING: no SHAs to merge, falling back to initial cloned commit
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mstep-setup-jx-git-credentials[0m
+Generated Git credentials file /workspace/xdg_config/git/credentials
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mstep-build-python-unittest[0m
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+OK
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-lfxwr-1[0m stage [32mfrom-build-pack[0m and container [32mstep-build-container-build[0m
+error checking push permissions -- make sure you entered the correct tag name, and that you are authenticated correctly, and try again: checking push permission for "cr.yandex/goodsmileduck/erundopel:0.0.80": POST https://cr.yandex/v2/goodsmileduck/erundopel/blobs/uploads/: NAME_UNKNOWN: Registry goodsmileduck not found ; requestId = c275ab3a-02bf-9b42-8457-ebdd6c65bf74
+[31m
+Pipeline failed on stage 'from-build-pack' : container 'step-build-container-build'. The execution of the pipeline has stopped.[0m
