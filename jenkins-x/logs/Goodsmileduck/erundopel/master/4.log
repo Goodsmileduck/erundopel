@@ -1,0 +1,245 @@
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mcredential-initializer[0m
+{"level":"info","ts":1596943744.998124,"caller":"creds-init/main.go:44","msg":"Credentials initialized."}
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mworking-dir-initializer[0m
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mplace-tools[0m
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-git-source-goodsmileduck-erundopel-master-7w54n-r8npg[0m
+{"level":"info","ts":1596943755.266322,"caller":"git/git.go:105","msg":"Successfully cloned https://github.com/*************/erundopel.git @ v0.0.83 in path /workspace/source"}
+{"level":"warn","ts":1596943755.266626,"caller":"git/git.go:152","msg":"Unexpected error: creating symlink: symlink /tekton/home/.ssh /root/.ssh: file exists"}
+{"level":"info","ts":1596943755.3068292,"caller":"git/git.go:133","msg":"Successfully initialized and updated submodules in path /workspace/source"}
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-setup-builder-home[0m
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-git-merge[0m
+Using SHAs from PULL_REFS=master:c840e3aa7e85ce86821b8d0528d19b7317ed1e00
+WARNING: no SHAs to merge, falling back to initial cloned commit
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-setup-jx-git-credentials[0m
+Generated Git credentials file /workspace/xdg_config/git/credentials
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-build-python-unittest[0m
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+OK
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-build-container-build[0m
+[36mINFO[0m[0001] Using dockerignore file: /workspace/source/.dockerignore 
+[36mINFO[0m[0001] Retrieving image manifest python:3.6-alpine3.7 
+[36mINFO[0m[0003] Retrieving image manifest python:3.6-alpine3.7 
+[36mINFO[0m[0004] Built cross stage deps: map[]                
+[36mINFO[0m[0004] Retrieving image manifest python:3.6-alpine3.7 
+[36mINFO[0m[0005] Retrieving image manifest python:3.6-alpine3.7 
+[36mINFO[0m[0006] Executing 0 build triggers                   
+[36mINFO[0m[0006] Checking for cached layer cr.yandex/todo/cache:d84bfec6fe913ae254ff0afcb00abc603a374494ce1da26200b1985ae64056ac... 
+[36mINFO[0m[0006] No cached layer found for cmd COPY requirements.txt ${DIR}/requirements.txt 
+[36mINFO[0m[0006] cmd: EXPOSE                                  
+[36mINFO[0m[0006] Adding exposed port: 5000/tcp                
+[36mINFO[0m[0006] Unpacking rootfs as cmd COPY requirements.txt ${DIR}/requirements.txt requires it. 
+[36mINFO[0m[0009] ENV DIR /app                                 
+[36mINFO[0m[0009] No files changed in this command, skipping snapshotting. 
+[36mINFO[0m[0009] COPY requirements.txt ${DIR}/requirements.txt 
+[36mINFO[0m[0009] Resolving 1 paths                            
+[36mINFO[0m[0009] Taking snapshot of files...                  
+[36mINFO[0m[0009] Pushing layer cr.yandex/todo/cache:d84bfec6fe913ae254ff0afcb00abc603a374494ce1da26200b1985ae64056ac to cache now 
+[36mINFO[0m[0009] RUN apk add --no-cache build-base git  && pip install -r ${DIR}/requirements.txt  && apk del build-base git 
+[36mINFO[0m[0009] Taking snapshot of full filesystem...        
+[36mINFO[0m[0012] Resolving 5470 paths                         
+[36mINFO[0m[0012] cmd: /bin/sh                                 
+[36mINFO[0m[0012] args: [-c apk add --no-cache build-base git  && pip install -r ${DIR}/requirements.txt  && apk del build-base git] 
+[36mINFO[0m[0012] Running: [/bin/sh -c apk add --no-cache build-base git  && pip install -r ${DIR}/requirements.txt  && apk del build-base git] 
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.7/community/x86_64/APKINDEX.tar.gz
+(1/24) Upgrading musl (1.1.18-r3 -> 1.1.18-r4)
+(2/24) Installing binutils-libs (2.30-r2)
+(3/24) Installing binutils (2.30-r2)
+(4/24) Installing gmp (6.1.2-r1)
+(5/24) Installing isl (0.18-r0)
+(6/24) Installing libgomp (6.4.0-r5)
+(7/24) Installing libatomic (6.4.0-r5)
+(8/24) Installing pkgconf (1.3.10-r0)
+(9/24) Installing libgcc (6.4.0-r5)
+(10/24) Installing mpfr3 (3.1.5-r1)
+(11/24) Installing mpc1 (1.0.3-r1)
+(12/24) Installing libstdc++ (6.4.0-r5)
+(13/24) Installing gcc (6.4.0-r5)
+(14/24) Installing musl-dev (1.1.18-r4)
+(15/24) Installing libc-dev (0.7.1-r0)
+(16/24) Installing g++ (6.4.0-r5)
+(17/24) Installing make (4.2.1-r0)
+(18/24) Installing fortify-headers (0.9-r0)
+(19/24) Installing build-base (0.5-r0)
+(20/24) Installing libssh2 (1.9.0-r1)
+(21/24) Installing libcurl (7.61.1-r3)
+(22/24) Installing pcre2 (10.30-r0)
+(23/24) Installing git (2.15.4-r0)
+(24/24) Upgrading musl-utils (1.1.18-r3 -> 1.1.18-r4)
+Executing busybox-1.27.2-r11.trigger
+OK: 186 MiB in 55 packages
+Collecting aioalice==1.3.0 (from -r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/e9/08/c9939a1e9e2ad285ce0f4982ddd7d5e16e2c66cffffb507270263479d080/aioAlice-1.3.0-py3-none-any.whl
+Collecting motor==2.0 (from -r /app/requirements.txt (line 3))
+  Downloading https://files.pythonhosted.org/packages/28/ca/a2e740ad2822cbf0d2ac4a3b2b48e043142014ab5c8c2129fa5c71c8cdb5/motor-2.0.0-py2.py3-none-any.whl (45kB)
+Collecting envparse==0.2.0 (from -r /app/requirements.txt (line 4))
+  Downloading https://files.pythonhosted.org/packages/2f/8d/bee8a59732c169a455627ff1557d0db180f7c352b0274480267ad3e46875/envparse-0.2.0.tar.gz
+Collecting aiohttp_healthcheck==1.3.1 (from -r /app/requirements.txt (line 5))
+  Downloading https://files.pythonhosted.org/packages/65/af/b15857f9da4f5721081cbb2286f47fd15ee07e169c2faa4864748be193e8/aiohttp_healthcheck-1.3.1.tar.gz
+Collecting prometheus-async==19.2.0 (from -r /app/requirements.txt (line 6))
+  Downloading https://files.pythonhosted.org/packages/85/19/3b0d557329b72bb4cb5af04bb5c5204bee6e8886b6520595320fb5c939d6/prometheus_async-19.2.0-py2.py3-none-any.whl
+Collecting aiohttp>=3.3.2 (from aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/c2/f7/f0ad3dbace4762fef5d80aa4124b41bf218e4c4dd6d387a86cede707d9a4/aiohttp-3.6.2-py3-none-any.whl (441kB)
+Collecting attrs==18.1.0 (from aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/41/59/cedf87e91ed541be7957c501a92102f9cc6363c623a7666d69d51c78ac5b/attrs-18.1.0-py2.py3-none-any.whl
+Collecting pymongo<4,>=3.6 (from motor==2.0->-r /app/requirements.txt (line 3))
+  Downloading https://files.pythonhosted.org/packages/ae/e4/cf2c921516dc12b38b225e2c13646d3a2562587dd8f5249bc2584988518d/pymongo-3.11.0.tar.gz (771kB)
+Collecting prometheus-client>=0.0.18 (from prometheus-async==19.2.0->-r /app/requirements.txt (line 6))
+  Downloading https://files.pythonhosted.org/packages/3f/0e/554a265ffdc56e1494ef08e18f765b0cdec78797f510c58c45cf37abb4f4/prometheus_client-0.8.0-py2.py3-none-any.whl (53kB)
+Collecting wrapt (from prometheus-async==19.2.0->-r /app/requirements.txt (line 6))
+  Downloading https://files.pythonhosted.org/packages/82/f7/e43cefbe88c5fd371f4cf0cf5eb3feccd07515af9fd6cf7dbf1d1793a797/wrapt-1.12.1.tar.gz
+Collecting async-timeout<4.0,>=3.0 (from aiohttp>=3.3.2->aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/e1/1e/5a4441be21b0726c4464f3f23c8b19628372f606755a9d2e46c187e65ec4/async_timeout-3.0.1-py3-none-any.whl
+Collecting chardet<4.0,>=2.0 (from aiohttp>=3.3.2->aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl (133kB)
+Collecting yarl<2.0,>=1.0 (from aiohttp>=3.3.2->aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/ac/dd/59768bb3fa08e8b23e91575bca3ff8d2edbfbceebec8c59eaa24c4215791/yarl-1.5.1.tar.gz (173kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+    Preparing wheel metadata: started
+    Preparing wheel metadata: finished with status 'done'
+Collecting multidict<5.0,>=4.5 (from aiohttp>=3.3.2->aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/65/d4/fabdcc5ee4451c8a8e177e27ddfd131a53a82ecc5a3b68468b7e9f8d70b4/multidict-4.7.6.tar.gz (50kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+    Preparing wheel metadata: started
+    Preparing wheel metadata: finished with status 'done'
+Collecting idna-ssl>=1.0; python_version < "3.7" (from aiohttp>=3.3.2->aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/46/03/07c4894aae38b0de52b52586b24bf189bb83e4ddabfe2e2c8f2419eec6f4/idna-ssl-1.1.0.tar.gz
+Collecting typing-extensions>=3.6.5; python_version < "3.7" (from aiohttp>=3.3.2->aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/0c/0e/3f026d0645d699e7320b59952146d56ad7c374e9cd72cd16e7c74e657a0f/typing_extensions-3.7.4.2-py3-none-any.whl
+Collecting idna>=2.0 (from yarl<2.0,>=1.0->aiohttp>=3.3.2->aioalice==1.3.0->-r /app/requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/a2/38/928ddce2273eaa564f6f50de919327bf3a00f091b5baba8dfa9460f3a8a8/idna-2.10-py2.py3-none-any.whl (58kB)
+Building wheels for collected packages: yarl, multidict
+  Building wheel for yarl (PEP 517): started
+  Building wheel for yarl (PEP 517): finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/5a/03/02/171630548e67a3f4d46ef87ed9c4da22702db72e91729d6d91
+  Building wheel for multidict (PEP 517): started
+  Building wheel for multidict (PEP 517): finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/1f/9d/78/5f26d5ea7d1cf9c9df8dbb2b1ecb7a988af034cc1a8cf69a64
+Successfully built yarl multidict
+Building wheels for collected packages: envparse, aiohttp-healthcheck, pymongo, wrapt, idna-ssl
+  Building wheel for envparse (setup.py): started
+  Building wheel for envparse (setup.py): finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/af/f0/a2/8e7f99dd8fe717b0ba4815ea52ff0c96dea15b975db317cd82
+  Building wheel for aiohttp-healthcheck (setup.py): started
+  Building wheel for aiohttp-healthcheck (setup.py): finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/a8/3d/b0/48debe84ea68b987f6af367f6e085669d5d9ed911c8a819c85
+  Building wheel for pymongo (setup.py): started
+  Building wheel for pymongo (setup.py): finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/7d/71/ba/a322db4968631a26b7de5cda46166429984c25ca588034e9b7
+  Building wheel for wrapt (setup.py): started
+  Building wheel for wrapt (setup.py): finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/b1/c2/ed/d62208260edbd3fa7156545c00ef966f45f2063d0a84f8208a
+  Building wheel for idna-ssl (setup.py): started
+  Building wheel for idna-ssl (setup.py): finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/d3/00/b3/32d613e19e08a739751dd6bf998cfed277728f8b2127ad4eb7
+Successfully built envparse aiohttp-healthcheck pymongo wrapt idna-ssl
+Installing collected packages: async-timeout, attrs, chardet, idna, multidict, typing-extensions, yarl, idna-ssl, aiohttp, aioalice, pymongo, motor, envparse, aiohttp-healthcheck, prometheus-client, wrapt, prometheus-async
+Successfully installed aioalice-1.3.0 aiohttp-3.6.2 aiohttp-healthcheck-1.3.1 async-timeout-3.0.1 attrs-18.1.0 chardet-3.0.4 envparse-0.2.0 idna-2.10 idna-ssl-1.1.0 motor-2.0.0 multidict-4.7.6 prometheus-async-19.2.0 prometheus-client-0.8.0 pymongo-3.11.0 typing-extensions-3.7.4.2 wrapt-1.12.1 yarl-1.5.1
+You are using pip version 19.0.1, however version 20.2.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+WARNING: Ignoring APKINDEX.70c88391.tar.gz: No such file or directory
+WARNING: Ignoring APKINDEX.5022a8a2.tar.gz: No such file or directory
+(1/22) Purging build-base (0.5-r0)
+(2/22) Purging g++ (6.4.0-r5)
+(3/22) Purging gcc (6.4.0-r5)
+(4/22) Purging binutils (2.30-r2)
+(5/22) Purging libatomic (6.4.0-r5)
+(6/22) Purging libgomp (6.4.0-r5)
+(7/22) Purging libstdc++ (6.4.0-r5)
+(8/22) Purging make (4.2.1-r0)
+(9/22) Purging libc-dev (0.7.1-r0)
+(10/22) Purging musl-dev (1.1.18-r4)
+(11/22) Purging fortify-headers (0.9-r0)
+(12/22) Purging git (2.15.4-r0)
+(13/22) Purging binutils-libs (2.30-r2)
+(14/22) Purging mpc1 (1.0.3-r1)
+(15/22) Purging mpfr3 (3.1.5-r1)
+(16/22) Purging isl (0.18-r0)
+(17/22) Purging gmp (6.1.2-r1)
+(18/22) Purging pkgconf (1.3.10-r0)
+(19/22) Purging libgcc (6.4.0-r5)
+(20/22) Purging libcurl (7.61.1-r3)
+(21/22) Purging libssh2 (1.9.0-r1)
+(22/22) Purging pcre2 (10.30-r0)
+Executing busybox-1.27.2-r11.trigger
+OK: 16 MiB in 33 packages
+[36mINFO[0m[0046] Taking snapshot of full filesystem...        
+[36mINFO[0m[0047] Resolving 7047 paths                         
+[36mINFO[0m[0048] EXPOSE 5000                                  
+[36mINFO[0m[0048] cmd: EXPOSE                                  
+[36mINFO[0m[0048] Adding exposed port: 5000/tcp                
+[36mINFO[0m[0048] No files changed in this command, skipping snapshotting. 
+[36mINFO[0m[0048] COPY ./app /app                              
+[36mINFO[0m[0048] Resolving 5 paths                            
+[36mINFO[0m[0048] Taking snapshot of files...                  
+[36mINFO[0m[0048] Pushing layer cr.yandex/todo/cache:4b4badf7e7367e79e514b7612c7177633ef3884ff9afe1739295261d7a5ffcde to cache now 
+[36mINFO[0m[0048] WORKDIR ${DIR}                               
+[36mINFO[0m[0048] cmd: workdir                                 
+[36mINFO[0m[0048] Changed working directory to /app            
+[36mINFO[0m[0048] No files changed in this command, skipping snapshotting. 
+[36mINFO[0m[0048] CMD ["python", "app.py"]                     
+[36mINFO[0m[0048] No files changed in this command, skipping snapshotting. 
+[36mINFO[0m[0048] Pushing layer cr.yandex/todo/cache:b2a3487563d7a22b5564d624be822feb6d5b619fc823a132b1bd9dd4fd8e6971 to cache now 
+[33mWARN[0m[0048] error uploading layer to cache: failed to push to destination cr.yandex/todo/cache:d84bfec6fe913ae254ff0afcb00abc603a374494ce1da26200b1985ae64056ac: POST https://cr.yandex/v2/todo/cache/blobs/uploads/: NAME_UNKNOWN: Registry todo not found ; requestId = 3bcaca01-1fdc-902f-a35a-0805639654a0 
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-build-post-build[0m
+no CVE provider running in the current ** namespace so skip adding image to be analysed
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-promote-changelog[0m
+Converted /workspace/source/charts/erundopel to an unshallow repository
+Generating change log from git ref b004eb0a9d4f086ea39dc300b8734a7aff5a801d => 42db8cecdb423a7cc41508ddf3c9199a87daa261
+Associating user stanislav-serebrennikov in users.jenkins.io with email goodsmileduck@gmail.com to git GitProvider user with login stanislav-serebrennikov-0 as emails match
+Adding label jenkins.io/git-github-userid=stanislav-serebrennikov-0 to user stanislav-serebrennikov in users.jenkins.io
+Associating user stanislav-serebrennikov in users.jenkins.io with email goodsmileduck@gmail.com to git GitProvider user with login stanislav-serebrennikov-0 as emails match
+Adding label jenkins.io/git-github-userid=stanislav-serebrennikov-0 to user stanislav-serebrennikov in users.jenkins.io
+Finding issues in commit messages using git format
+WARNING: No release found for *************/erundopel and tag v0.0.83 so creating a new release
+Updated the release information at https://github.com/*************/erundopel/releases/tag/v0.0.83
+generated: /workspace/source/charts/erundopel/templates/release.yaml
+Created Release erundopel-0-0-83 resource in namespace **
+Updating PipelineActivity goodsmileduck-erundopel-master-4 with version 0.0.83
+Updated PipelineActivities goodsmileduck-erundopel-master-4 with release notes URL: https://github.com/*************/erundopel/releases/tag/v0.0.83
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-promote-helm-release[0m
+WARNING: No $CHART_REPOSITORY defined so using the default value of: http://jenkins-x-chartmuseum:8080
+Adding missing Helm repo: storage.googleapis.com https://storage.googleapis.com/chartmuseum.jenkins-x.io
+Successfully added Helm repository storage.googleapis.com.
+Adding missing Helm repo: jenkins-x-chartmuseum http://jenkins-x-chartmuseum:8080
+Successfully added Helm repository jenkins-x-chartmuseum.
+WARNING: No $CHART_REPOSITORY defined so using the default value of: http://jenkins-x-chartmuseum:8080
+Uploading chart file erundopel-0.0.83.tgz to http://jenkins-x-chartmuseum:8080/api/charts
+Received 201 response: {"saved":true}
+
+Showing logs for build [32mgoodsmileduck-erundopel-master-7w54n-4[0m stage [32mfrom-build-pack[0m and container [32mstep-promote-jx-promote[0m
+WARNING: prow based install so skip waiting for the merge of Pull Requests to go green as currently there is an issue with gettingstatuses from the PR, see https://github.com/jenkins-x/**/issues/2410
+WARNING: No $CHART_REPOSITORY defined so using the default value of: http://jenkins-x-chartmuseum:8080
+Promoting app erundopel version 0.0.83 to namespace **-staging
+Created Pull Request: https://github.com/*************/environment-yc-yandex-staging/pull/42
+Added label updatebot to Pull Request https://github.com/*************/environment-yc-yandex-staging/pull/42
+got git provider status pending from PR https://github.com/*************/environment-yc-yandex-staging/pull/42
+got git provider status pending from PR https://github.com/*************/environment-yc-yandex-staging/pull/42
+got git provider status pending from PR https://github.com/*************/environment-yc-yandex-staging/pull/42
+got git provider status pending from PR https://github.com/*************/environment-yc-yandex-staging/pull/42
+got git provider status pending from PR https://github.com/*************/environment-yc-yandex-staging/pull/42
+got git provider status pending from PR https://github.com/*************/environment-yc-yandex-staging/pull/42
+Pull Request https://github.com/*************/environment-yc-yandex-staging/pull/42 is merged at sha dc0b242e9bf3e32f21a7171e0e56e5622fe982a0
+Pull Request merged but we are not waiting for the update pipeline to complete!
+WARNING: Could not find the service URL in namespace **-staging for names erundopel, **-staging-erundopel, **-staging-erundopel
