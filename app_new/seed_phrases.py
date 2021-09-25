@@ -45,10 +45,6 @@ def seed_phrases():
     Phrase(PhraseType.NEXT_QUESTION.value, 'Итак, новый вопрос.').save()
     Phrase(PhraseType.NEXT_QUESTION.value, 'Новый вопрос звучит так: ').save()
 
-    # two %s are necessary! %points and %level :
-    Phrase(PhraseType.NEW_LEVEL_CONGRATULATION.value, 'Поздравляю, даны ответы уже на %(number)i %(question)s и достигнут уровень "%(level)s"! Продолжай в том же духе!\nХочешь продолжить?').save()
-    Phrase(PhraseType.NEW_LEVEL_CONGRATULATION.value, 'Невероятно! Ты прошёл уже %(number)i %(question)s, Твой новый уровень - "%(level)s"!\nИдём дальше?').save()
-
     Phrase(PhraseType.TRY_AGAIN.value, 'Попробуй ещё раз.').save()
     Phrase(PhraseType.TRY_AGAIN.value, 'Попытайся снова.').save()
     Phrase(PhraseType.TRY_AGAIN.value, 'Нужно попробовать еще.').save()
