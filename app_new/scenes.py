@@ -225,7 +225,7 @@ class Main(Scene):
 
     def handle_global_intents(self, request):
         user_meant = UserMeaning(request)
-        if intents.YANDEX_HELP in request.intents
+        if intents.YANDEX_HELP in request.intents:
             return GetHelp()
         elif intents.YANDEX_WHAT_CAN_YOU_DO in request.intents and intents.YANDEX_CONFIRM not in request.intents:
             return WhatCanYouDo()
