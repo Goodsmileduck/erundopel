@@ -322,7 +322,7 @@ class AskQuestion(Main):
         text = ''
 
         # Wrong answer, giving one more attempt
-        elif self.wrong_answer:
+        if self.wrong_answer:
             attempts = search_in_session(request, 'attempts')
             if not attempts:
                 attempts = 1
