@@ -29,16 +29,9 @@ def seed_questions_from_csv():
                     possible_answers_tts.append(Answer(x.lower()))
             Question(
                 id=q["id"],
-                question_type=q["question_type"],
                 question=q["question"],
                 tts=q.get('tts', ''),
-                clue=q["clue"],
-                clue_tts=q["clue_tts"],
-                difficulty=q["difficulty"],
                 right_answers=right_answers,
-                interesting_fact=q.get('interesting_fact', ''),
-                interesting_fact_tts=q.get('interesting_fact_tts', ''),
-                interesting_fact_pic_id=q.get('interesting_fact_pic_id', ''),
                 possible_answers=possible_answers,
                 possible_answers_tts=possible_answers_tts
             ).save()
