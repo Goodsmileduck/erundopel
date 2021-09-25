@@ -24,6 +24,7 @@ jx:
 
 # define environment variables here as a map of key: value
 env:
+  DB_HOST: "mongo-mongodb.mongo"
 
 # enable this flag to use knative serve to deploy the app
 knativeDeploy: false
