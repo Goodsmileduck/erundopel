@@ -54,6 +54,7 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.service.internalPort }}
+{{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path: {{ .Values.livenessProbe.probePath | default .Values.probePath }}
@@ -62,6 +63,8 @@ spec:
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           successThreshold: {{ .Values.livenessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+{{- end }}
+{{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
             path: {{ .Values.readinessProbe.probePath | default .Values.probePath }}
@@ -69,6 +72,7 @@ spec:
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+{{- end }}
         resources:
 {{ toYaml .Values.resources | indent 12 }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
