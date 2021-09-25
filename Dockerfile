@@ -8,6 +8,6 @@ RUN apk add --no-cache build-base git\
   && apk del build-base git
 EXPOSE 5000
 
-COPY ./app /app
+COPY ./app_new /app
 WORKDIR ${DIR}
 CMD ["python", "app.py"]
