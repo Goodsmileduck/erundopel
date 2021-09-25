@@ -3,16 +3,14 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: draft
-  tag: dev
+  repository: cr.yandex/crp3htu2ntob6dl52795/erundopel
+  tag: 0.0.90
   pullPolicy: IfNotPresent
-
 # define environment variables here as a map of key: value
 env:
   DB_HOST: 'mongo-mongodb.mongo'
 # enable this flag to use knative serve to deploy the app
 knativeDeploy: false
-
 service:
   name: erundopel
   type: ClusterIP
