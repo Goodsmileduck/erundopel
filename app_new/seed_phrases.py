@@ -45,16 +45,6 @@ def seed_phrases():
     Phrase(PhraseType.NEXT_QUESTION.value, 'Итак, новый вопрос.').save()
     Phrase(PhraseType.NEXT_QUESTION.value, 'Новый вопрос звучит так: ').save()
 
-    Phrase(PhraseType.OFFER_CLUE.value, 'Дать подсказку?').save()
-    Phrase(PhraseType.OFFER_CLUE.value, 'Хочешь подсказку?').save()
-    Phrase(PhraseType.OFFER_CLUE.value, 'Может подсказку?').save()
-    Phrase(PhraseType.OFFER_CLUE.value, 'Может помочь?').save()
-
-    Phrase(PhraseType.YOU_HAD_CLUE_ASK.value, 'Кажется, я уже давал подсказку, повторить?').save()
-    Phrase(PhraseType.YOU_HAD_CLUE_ASK.value, 'Дай подумаю... - Нет, ничего больше не могу вспомнить. Повторить прошлую подсказку?').save()
-    Phrase(PhraseType.YOU_HAD_CLUE_ASK.value, 'Я уже помог, чем мог. Хочешь, повторю?').save()
-    Phrase(PhraseType.YOU_HAD_CLUE_ASK.value, 'Моя память фрагментирована, но мне кажется, что подсказка уже была... Повторить?').save()
-
     # two %s are necessary! %points and %level :
     Phrase(PhraseType.NEW_LEVEL_CONGRATULATION.value, 'Поздравляю, даны ответы уже на %(number)i %(question)s и достигнут уровень "%(level)s"! Продолжай в том же духе!\nХочешь продолжить?').save()
     Phrase(PhraseType.NEW_LEVEL_CONGRATULATION.value, 'Невероятно! Ты прошёл уже %(number)i %(question)s, Твой новый уровень - "%(level)s"!\nИдём дальше?').save()
@@ -80,11 +70,6 @@ def seed_phrases():
     Phrase(PhraseType.FALLBACK_2_BEGIN.value, 'Моя память сильно пострадала при пожаре, и я не понимаю, что ты имеешь в виду.').save()
     Phrase(PhraseType.FALLBACK_2_BEGIN.value, 'Я много чего не помню и не всегда понимаю, что ты говоришь.').save()
     Phrase(PhraseType.FALLBACK_2_BEGIN.value, 'Некоторые слова пропали из моего словаря, иногда я не понимаю простую человеческую речь.').save()
-
-    # two %s are necessary! %points and %level :
-    Phrase(PhraseType.GET_LEVEL.value, 'Ты правильно ответил на %(number)i %(question)s и достиг уровня "%(level)s"!\nСыграем ещё?').save()
-    Phrase(PhraseType.GET_LEVEL.value, 'Ты угадал уже %(number)i %(question)s! Твой уровень - "%(level)s"!\nГотов ли ты продолжить?').save()
-    Phrase(PhraseType.GET_LEVEL.value, 'Твой уровень - "%(level)s". Правильно дан ответ на %(number)i %(question)s!\nИграем?').save()
 
     Phrase(PhraseType.LETS_PLAY.value, 'Давай играть!').save()
     Phrase(PhraseType.LETS_PLAY.value, 'Начинаем игру!').save()
