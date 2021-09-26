@@ -66,7 +66,7 @@ service:
   name: erundopel
   type: ClusterIP
   externalPort: 80
-  internalPort: 8080
+  internalPort: 5000
   annotations: {}
   # Add labels to the service
   labels: {}
