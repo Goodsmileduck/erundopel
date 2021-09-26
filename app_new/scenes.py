@@ -263,7 +263,7 @@ class Welcome(Main):
                 first_time = True
                 logging.info(f"New user. application_id: {user.application_id} session: {request['session']['session_id']}")
 
-            gained_new_level, level, points = user.gained_new_level()
+            points = user.points()
             if first_time or points < 1:
                 text = 'Привет! Ерундопель - это игра где нужно угадать ' \
                        'правильное определение редких слов.\n' \
@@ -366,7 +366,7 @@ class AskQuestion(Main):
                 if not question:
                     return self.make_response('Это просто невероятно, ты прошёл все вопросы! Поздравляю! \n'
                                               'Возвращайся чуть позже за новыми словами. \nСПАСИБО!!!')
-            gained_level, level, points = user.gained_new_level()
+            points = user.points()
             if self.lets_play:
                 if points < 1:
                     text = tts = "Я смогу проверить только 2 ответа на каждый вопрос. У тебя всегда есть возможность пропустить или повторить вопрос.\nНачнём!\n"
