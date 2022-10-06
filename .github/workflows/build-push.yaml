@@ -11,7 +11,7 @@ on:
 concurrency: ${{ github.workflow }}
 
 env:
-  docker_image_amp: registry.digitalocean.com/goodsmileduck/erundopel
+  docker_image: registry.digitalocean.com/goodsmileduck/erundopel
 
 jobs:
   push:
@@ -60,7 +60,7 @@ jobs:
           push: false
           file: Dockerfile
           tags: |
-            ${{ env.docker_image_amp }}:${{ steps.vars.outputs.sha_short }}
+            ${{ env.docker_image }}:${{ steps.vars.outputs.sha_short }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -72,8 +72,8 @@ jobs:
           push: true
           file: Dockerfile
           tags: |
-            ${{ env.docker_image_amp }}:erundopel
-            ${{ env.docker_image_amp }}:${{ steps.vars.outputs.sha_short }}
+            ${{ env.docker_image }}:${{ steps.tag_version.outputs.new_tag }}
+            ${{ env.docker_image }}:${{ steps.vars.outputs.sha_short }}
           labels: |
             sha_short=${{ steps.vars.outputs.sha_short}}
           cache-from: type=local,src=/tmp/.buildx-cache
