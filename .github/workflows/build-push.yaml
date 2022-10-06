@@ -1,4 +1,4 @@
-name: Build erundopel Container
+name: Build erundopel image
 
 on:
   push:
