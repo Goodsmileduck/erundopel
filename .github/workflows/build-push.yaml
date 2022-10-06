@@ -1,0 +1,100 @@
+name: Build erundopel Container
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}
+
+env:
+  docker_image_amp: registry.digitalocean.com/goodsmileduck/erundopel
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: erundopel-buildx-${{ github.sha }}
+          restore-keys: |
+            erundopel-buildx-
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
+
+      - name: Set short sha
+        id: vars
+        run: echo "::set-output name=sha_short::${GITHUB_SHA::7}"
+
+      - name: Bump version and tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: v
+          dry_run: ${{ github.event_name == 'pull_request' && true || false }}
+          fetch_all_tags: true
+
+      - name: For PR build only
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          file: Dockerfile
+          tags: |
+            ${{ env.docker_image_amp }}:${{ steps.vars.outputs.sha_short }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: For merge build and push erundopel
+        if: ${{ github.event_name == 'push' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          file: Dockerfile
+          tags: |
+            ${{ env.docker_image_amp }}:erundopel
+            ${{ env.docker_image_amp }}:${{ steps.vars.outputs.sha_short }}
+          labels: |
+            sha_short=${{ steps.vars.outputs.sha_short}}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: Generate changelog
+        id: changelog
+        uses: metcalfc/changelog-generator@v1.0.0
+        with:
+          myToken: ${{ secrets.GITHUB_TOKEN }}
+          base-ref: ${{steps.tag_version.outputs.previous_tag }}
+
+      - name: Create Release
+        if: ${{ github.event_name == 'push' }}
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{steps.tag_version.outputs.new_tag }}
+          release_name: ${{steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
