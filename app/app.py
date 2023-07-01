@@ -10,7 +10,6 @@ from aiohttp_healthcheck import HealthCheck
 from prometheus_client import Gauge, Histogram
 from prometheus_async import aio
 
-from chatbase import track_message, track_click
 from database import db
 from settings import *
 
@@ -91,7 +90,6 @@ async def send_pong(alice_request):
 async def handle_new_session(alice_request):
     m = Message(alice_request)
     logging.info(f'Initialized new session!\nuser_id is {m.user_id!r}')
-    track_message(m.user_id, m.session_id, 'start', m.command, False)
     await dp.storage.set_state(m.user_id, States.START)
     return alice_request.response(
         "Привет! Ерундопель - это игра где нужно угадать "
@@ -114,11 +112,9 @@ async def handle_user_agrees(alice_request):
     yes_list = ['давай', 'начать игру', 'да', 'хочу', 'начнем игру', 'еще', 'продолжить']
     await dp.storage.reset_state(m.user_id)
     if m.command in no_list:
-        track_message(m.user_id, m.session_id, 'no', m.command, False)
         return alice_request.response("Жаль, возвращайтесь как решите сыграть.\n"
                                       "До встречи!",
                                       end_session=True)
-    track_message(m.user_id, m.session_id, 'start_game', m.command, False)
     words = get_words()
     await dp.storage.update_data(m.user_id, words_list=words)
     words_list = []
@@ -181,7 +177,6 @@ async def handle_hi_alisa(alice_request):
 @dp.request_handler(commands=['помощь'])
 async def handle_user_help(alice_request):
     m = Message(alice_request)
-    track_message(m.user_id, m.session_id, 'help', m.command, False)
     return alice_request.response(
         'Скажите номер варианта ответа, "повтори"" или "стоп".',
         buttons=choose_buttons)
@@ -189,7 +184,6 @@ async def handle_user_help(alice_request):
 @dp.request_handler(commands=['помощь', 'что ты умеешь', 'что ты умеешь?'])
 async def handle_user_what(alice_request):
     m = Message(alice_request)
-    track_message(m.user_id, m.session_id, 'help', m.command, False)
     return alice_request.response(
         "Я знаю много редких слов. Могу загадать тебе несколько. Хочешь попробовать?",
         buttons=start_buttons)
@@ -212,7 +206,6 @@ async def handle_user_cancel(alice_request):
 @dp.request_handler(contains=['дальше', 'следующее', 'следующая', 'следующий'])
 async def handle_next(alice_request):
     m = Message(alice_request)
-    track_message(m.user_id, m.session_id, 'next', m.command, False)
     data = await dp.storage.get_data(m.user_id)
     points = int(data.get('points')) - 1
     words = data.get('words_list')
@@ -258,7 +251,6 @@ async def handle_next(alice_request):
     "третий", "третий вариант", "три", "3", "3 3"])
 async def handle_user_answer(alice_request):
     m = Message(alice_request)
-    track_message(m.user_id, m.session_id, 'choice', m.command, False)
     data = await dp.storage.get_data(m.user_id)
     words = data.get('words_list')
     words_iter = data.get('words')
@@ -364,7 +356,6 @@ async def handle_user_answer(alice_request):
     "пожалуйста повтори", "можешь повторить", "можешь повторить?", "да", "ладно"])
 async def handle_user_repeat(alice_request):
     m = Message(alice_request)
-    track_message(m.user_id, m.session_id, 'repeat', m.command, False)
     data = await dp.storage.get_data(m.user_id)
     questions = data.get('questions')
     word = data.get('word')
@@ -385,7 +376,6 @@ async def handle_user_repeat(alice_request):
 @dp.request_handler()
 async def handle_all_other_requests(alice_request):
     m = Message(alice_request)
-    track_message(m.user_id, m.session_id, None, m.command, True)
     return alice_request.response(
         'Скажите номер варианта (один, два или три), "повтори"" или "стоп".'
     )
