@@ -386,4 +386,4 @@ if __name__ == '__main__':
     app = get_new_configured_app(dispatcher=dp, path=WEBHOOK_URL_PATH)
     app.router.add_get("/healthz", health)
     app.router.add_get("/metrics", aio.web.server_stats)
-    web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
+    web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, loop=dp.loop)
