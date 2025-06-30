@@ -60,7 +60,7 @@ class States(Helper):
 
 def get_words():
     logging.info('getting new words')
-    words = db.words.aggregate([{'$sample': {'size': 5}}])
+    words = db.words.aggregate([{'$sample': {'size': WORDS_COUNT}}])
     return list(words)
 
 class Message:
@@ -294,11 +294,11 @@ async def handle_user_answer(alice_request):
             points = int(data.get('points')) + 3
             return alice_request.response(
                 f"{previous_word} это: {right_choice}."
-                f"Вы ответили на все вопросы.\n"
+                f"Вы ответили на {WORDS_COUNT} вопросов.\n"
                 f"Спасибо за игру!\n"
                 f"Вы набрали очков: {points}\n",
                 tts='<speaker audio="alice-sounds-game-win-1.opus">'
-                f"Вы ответили на все вопросы.\n - "
+                f"Вы ответили на {WORDS_COUNT_TEXT} вопросов.\n - "
                 f"Спасибо за игру!\n - "
                 f"Вы набрали очков: {points}\n - ",
                 end_session=True, buttons=[REVIEW_BUTTON])
@@ -308,7 +308,21 @@ async def handle_user_answer(alice_request):
             points = int(data.get('points')) - 1
             await dp.storage.update_data(m.user_id, failed=0, points=points)
             
-            word = next(words_iter)
+            try:
+                word = next(words_iter)
+            except StopIteration:
+                points = int(data.get('points')) - 3
+                return alice_request.response(
+                    f"{previous_word} это: {right_choice}."
+                    f"Вы ответили на {WORDS_COUNT} вопросов.\n"
+                    f"Спасибо за игру!\n"
+                    f"Вы набрали очков: {points}\n",
+                    tts='<speaker audio="alice-sounds-game-win-1.opus">'
+                    f"Вы ответили на {WORDS_COUNT_TEXT} вопросов.\n - "
+                    f"Спасибо за игру!\n - "
+                    f"Вы набрали очков: {points}\n - ",
+                    end_session=True, buttons=[REVIEW_BUTTON])
+            
             exp = [element for element in words if element['word'] == word][0]
             e1 = exp["e1"]
             e2 = exp["e2"]
